@@ -11,7 +11,7 @@
 int is_prime_naive(long p){
     int i;
     for(i = 3 ; i < p ; i++){
-        if(i%p==0){         //un i compris entre 3 et p-1 divise p, donc il n'est pas premier
+        if(p%i==0){         //un i compris entre 3 et p-1 divise p, donc il n'est pas premier
             return 0;        //Donc on retourne 0
         }
     }
