@@ -1,3 +1,6 @@
+#ifndef TEST_PRIMALITEH
+#define TEST_PRIMALITEH
+
 #include <stdio.h>
 #include <math.h>
 
@@ -9,3 +12,6 @@ int witness ( long a , long b , long d , long p );
 
 /*retourne si p est un nombre premier (test de Miller)*/
 int is_prime_miller ( long p , int k );
+
+
+#endif
