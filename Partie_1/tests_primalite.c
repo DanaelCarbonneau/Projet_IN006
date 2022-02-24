@@ -1,6 +1,12 @@
 /*--- Préambule ---*/
 #include "tests_primalite.h"
 
+#define M_MAX 1000
+#define A 10
+#define N 3
+
+
+/*Implémentation par une méthode naive*/
 /*Test naif de primalité*/
 int is_prime_naive(long p){
     int i;
@@ -12,7 +18,37 @@ int is_prime_naive(long p){
     return 1;               //On n'a trouvé aucun diviseurs, p est donc premier.
 }
 
+/*Exponentiation modulaire rapide*/
 
+long modpow_naive(long a, long m, long n){
+	long res = 1;
+	for (int i=0; i<m; i++){
+		res *= a;
+		res = res%n;
+	}
+	return res;
+}
+
+/*Complexité : m multiplications + m modulos = en téta(m)*/
+
+
+int modpow(long a, long m, long n){
+	if (m==0){
+		printf("Valeur de m non possible ! m > 0");
+		return -1;
+	}
+	if (m == 1){
+		return a%n;
+	}else{
+		if (m%2 == 0){
+			int b = modpow(a,m/2,n);
+			return (b*b)%n;
+		}else{
+			int b = modpow(a, floor(m/2), n);
+			return (a*b*b)%n;
+		}
+	}
+}
 
 
 /*Test de Rabin-Miller*/
@@ -54,10 +90,37 @@ int is_prime_miller ( long p , int k ) {
     long a ;
     int i ;
     for ( i = 0; i < k ; i ++) {
-        a = randlong (2 , p -1) ;
+        a = rand_long (2 , p -1) ;
         if ( witness (a ,b ,d , p ) ) {
             return 0;
         }
     }
     return 1;
+}
+
+/*Génération de nombres premiers*/
+long pow_2(int pow){
+	long res = 1;
+	for (int i = 1; i<=pow; i++){
+		res = res*2;
+	}return res;
+}
+
+long random_prime_number(int low_size, int up_size, int k){
+	long low = pow_2(low_size);
+	long up = pow_2(up_size+1)-1;
+
+	long p = rand_long(low,up);
+	int cpt = 1000;
+	while (!is_prime_miller(p,k) && cpt>0){
+		p = rand_long(low,up);
+		cpt--;
+	}
+	if (is_prime_miller(p,k)){
+		return p;
+	}else{
+		printf("Aucun nombre premier pour %d essais",1000-cpt);
+		return -1;
+	}
+
 }
