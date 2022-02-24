@@ -1,0 +1,11 @@
+Exercice 1 : 
+
+Danaël : Implémentation par une méthode naı̈ve, Implémentation du test de Miller-Rabin
+
+
+Elea : Exponentiation modulaire rapide, Génération de nombres premiers
+
+
+Exercice 2 : 
+
+On verra 
