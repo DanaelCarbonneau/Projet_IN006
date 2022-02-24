@@ -90,7 +90,7 @@ int is_prime_miller ( long p , int k ) {
     long a ;
     int i ;
     for ( i = 0; i < k ; i ++) {
-        a = randlong (2 , p -1) ;
+        a = rand_long (2 , p -1) ;
         if ( witness (a ,b ,d , p ) ) {
             return 0;
         }
@@ -116,7 +116,7 @@ long random_prime_number(int low_size, int up_size, int k){
 		p = rand_long(low,up);
 		cpt--;
 	}
-	if (is_prime_miller(p)){
+	if (is_prime_miller(p,k)){
 		return p;
 	}else{
 		printf("Aucun nombre premier pour %d essais",1000-cpt);
