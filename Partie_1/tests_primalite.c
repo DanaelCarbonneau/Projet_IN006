@@ -1,8 +1,9 @@
 /*--- Préambule ---*/
 #include <stdio.h>
 #include <math.h>
+#include "tests_primalite.h"
 
-
+/*Test naif de primalité*/
 int is_prime_naive(long p){
     int i;
     for(i = 3 ; i < p ; i++){
