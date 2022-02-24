@@ -6,6 +6,9 @@
 #include"tests_primalite.h"
 
 #define OCCURENCE_TEST_TEMPS 1000000000
+#define A 11
+#define N 3
+#define M_MAX 5000
 
 void menu(){
 	printf("0 - Sortie du programme\n");
@@ -16,49 +19,61 @@ void menu(){
 
 int main(){
 	char entree[256];
+	int rep = 0;
 	do{
 		/*Affichage du menu et récupération de la réponse*/
 		menu();
 		fgets(entree, 10,stdin);
 		rep = atoi(entree);
+
+		/*Variables nécessaires*/
+			clock_t temps_initial;
+			clock_t temps_final;
+			double temps_intervalle;
+			double temps_v1;
+			double temps_v2;
+			long a;
+			long n;
+			int low_size;
+			int up_size;
+			int k;
+			long res;
+			FILE* f_comp_modpow;
+
 		/*Réalisation de l'action souhaitée*/
 		switch(rep){
 			case 1:
-				/*Variables pour le temps*/
-				clock_t temps_initial;
-				clock_t temps_final;
-				double temps_intervalle;
 
 
     				/*Temps de calcul pour le test naïf de primalité*/
 
-			    	for(long i = 1000000; i < OCCURENCE_TEST_TEMPS ; i+=50){
+			    	temps_intervalle = 0;
+			    	a = 99999;
+			    	printf("%d\n\n",is_prime_naive(a));
+			    	n = a;
+			    	while (temps_intervalle < 0.002){
+			    		/*On prend la mesure du temps d'opérations pour la valeur de i*/
+						temps_initial = clock();
+						res = is_prime_naive(a);
+						temps_final = clock();
+						if (res){ 
+							n = a;
+							temps_intervalle = (double)(temps_final - temps_initial)/(CLOCKS_PER_SEC);
+							printf("%ld : %f\n", n, temps_intervalle);
+						}
+						a++;
 
-					/*On prend la mesure du temps d'opérations pour la valeur de i*/
-					temps_initial = clock();
-					is_prime_naive(i);
-					temps_final = clock();
-
-					/*On regarde si la durée dépasse les 0.002 secondes, si oui, on affiche la valeur et on arrête la boucle*/
-					temps_intervalle = (temps_final-temps_initial)/CLOCKS_PER_SEC;
-					if(temps_intervalle > 0.002){
-					    printf("Le temps de calcul dépasse les 2 milièmes de secondes pour p = %ld\n",i);
-					    break;
-				}				
-				break;
+			    	}
+					printf("Le temps de calcul dépasse les 2 milièmes de secondes pour p = %ld\n",n);			
+					break;
 			case 2:
 				/*Ouverture du fichier où stocker les résultats*/
-				FILE* f_comp_modpow = fopen("ComparaisonModPow.txt","w");
-
-			    /*Variables pour le temps*/
-				clock_t temps_initial;
-				clock_t temps_final;
-				double temps_v1;
-				double temps_v2;
+				f_comp_modpow = fopen("ComparaisonModPow.txt","w");
+				
 
 				/*et pour le calcul*/
-				long a = A;
-				long n = N;
+				a = A;
+				n = N;
 
 				for (int i = 1; i <= M_MAX; i++){
 
@@ -84,14 +99,14 @@ int main(){
 				fclose(f_comp_modpow);
 				break;
 			case 3:
-				int low_size = 10;
-				int up_size = 20;
-				int k = 100;
-				long res = random_prime_number(low_size,up_size,k);
+				low_size = 10;
+				up_size = 20;
+				k = 100;
+				res = random_prime_number(low_size,up_size,k);
 				if (res != -1){
 					printf("Nous avons trouvé p = %ld premier, entre les tailles %d et %d\n",res,low_size,up_size);
-				}
-				
+				}break;
+		}			
 			
 			
 	}while (rep != 0);
@@ -99,6 +114,3 @@ int main(){
         
     return 0;
 }
-
-
-
