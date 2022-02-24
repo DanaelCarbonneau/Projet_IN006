@@ -5,7 +5,7 @@
 #include<stdlib.h>
 #include"tests_primalite.h"
 
-#define OCCURENCE_TEST_TEMPS 1000000
+#define OCCURENCE_TEST_TEMPS 1000000000
 
 int main(){
 
@@ -17,7 +17,7 @@ int main(){
 
     /*Temps de calcul pour le test naïf de primalité*/
 
-    for(long i = 100000; i < OCCURENCE_TEST_TEMPS ; i+=50){
+    for(long i = 1000000; i < OCCURENCE_TEST_TEMPS ; i+=50){
 
         /*On prend la mesure du temps d'opérations pour la valeur de i*/
         temps_initial = clock();
