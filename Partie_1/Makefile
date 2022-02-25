@@ -1,4 +1,4 @@
-all :  main_cryptage
+all :  main_cryptage main
 
 main : main.o tests_primalite.o
 	gcc -o main main.o tests_primalite.o -lm

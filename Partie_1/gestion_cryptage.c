@@ -43,9 +43,7 @@ long* encrypt(char* chaine, long s, long n){
     long m;
     for(i = 0; i < taille_message ; i++){
         m = (long)chaine[i];
-        printf("m : %ld",m);
         coded[i] = modpow(m,s,n);        //On code chaque lettre du message
-        printf("code lettre : %ld\n",coded[i]);
 
     }
     //On peut alors retourner le message codé
@@ -60,8 +58,6 @@ char* decrypt(long* crypted, int size, long u, long n){
     //On décode chaque lettre du tableau de long
     long cour;
     for(int i = 0; i < size ; i++){
-        printf("crypted[i] : %ld\n",crypted[i]);
-        printf("modpow crypted[i] : %d\n",modpow(crypted[i],u,n));
         cour = crypted[i];
         decoded[i] = (char) modpow(cour, u,n); //formule donnée dans l'énoncé
     }

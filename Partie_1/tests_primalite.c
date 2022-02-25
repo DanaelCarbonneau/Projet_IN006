@@ -1,5 +1,8 @@
 /*--- Préambule ---*/
 #include "tests_primalite.h"
+#include<math.h>
+#include<stdio.h>
+#include<stdlib.h>
 
 #define M_MAX 1000
 #define A 10
@@ -32,23 +35,24 @@ long modpow_naive(long a, long m, long n){
 /*Complexité : m multiplications + m modulos = en téta(m)*/
 
 
-int modpow(long a, long m, long n){
+unsigned long modpow(long a, long m, long n){
 	if (m==0){
 		printf("Valeur de m non possible ! m > 0");
-		return -1;
+		return 1;
 	}
 	if (m == 1){
 		return a%n;
 	}else{
 		if (m%2 == 0){
-			int b = modpow(a,m/2,n);
+			unsigned long b = modpow(a,m/2,n);
 			return (b*b)%n;
 		}else{
-			int b = modpow(a, floor(m/2), n);
+			unsigned long b = modpow(a, ((m-1)/2) , n);
 			return (a*b*b)%n;
 		}
 	}
 }
+
 
 
 /*Test de Rabin-Miller*/
@@ -69,7 +73,7 @@ int witness ( long a , long b , long d , long p ) {
 }
 
 long rand_long ( long low , long up ) {
-    return rand () % ( up - low +1) + low ;
+    return rand() % ( up - low +1) + low ;
 }
 
 int is_prime_miller ( long p , int k ) {

@@ -25,7 +25,7 @@ int main (){
     long code = modpow((long)lettre,s,n);
     print_long_vector(&code,1);
     char decode = (char) modpow(code,u,n);
-    printf("%c",decode);
+    printf("caractère décodé : %c\n",decode);
 
     char message [999] = "Hello";
     int len = strlen ( message ) ;
