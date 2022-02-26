@@ -23,6 +23,8 @@ int is_prime_naive(long p){
 
 /*Exponentiation modulaire rapide*/
 
+/*Version naïve, de grande complexité*/
+
 long modpow_naive(long a, long m, long n){
 	long res = 1;
 	for (int i=0; i<m; i++){
@@ -38,7 +40,7 @@ long modpow_naive(long a, long m, long n){
 unsigned long modpow(long a, long m, long n){
 	if (m==0){
 		printf("Valeur de m non possible ! m > 0");
-		return 1;
+		return 1%n;
 	}
 	if (m == 1){
 		return a%n;
@@ -48,7 +50,7 @@ unsigned long modpow(long a, long m, long n){
 			return (b*b)%n;
 		}else{
 			unsigned long b = modpow(a, ((m-1)/2) , n);
-			return (a*b*b)%n;
+			return (((a*b)%n)*b)%n;
 		}
 	}
 }
@@ -73,7 +75,7 @@ int witness ( long a , long b , long d , long p ) {
 }
 
 long rand_long ( long low , long up ) {
-    return rand() % ( up - low +1) + low ;
+    return rand() % ( up - low +1 ) + low ;
 }
 
 int is_prime_miller ( long p , int k ) {
@@ -115,15 +117,15 @@ long random_prime_number(int low_size, int up_size, int k){
 	long up = pow_2(up_size+1)-1;
 
 	long p = rand_long(low,up);
-	int cpt = 1000;
-	while (!is_prime_miller(p,k) && cpt>0){
+	int cpt = 0;
+	while (!is_prime_miller(p,k) && cpt<1000){
 		p = rand_long(low,up);
-		cpt--;
+		cpt++;
 	}
 	if (is_prime_miller(p,k)){
 		return p;
 	}else{
-		printf("Aucun nombre premier pour %d essais",1000-cpt);
+		printf("Aucun nombre premier pour %d essais",cpt);
 		return -1;
 	}
 

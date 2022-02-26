@@ -25,7 +25,7 @@ long extended_gcd ( long s , long t , long *u , long * v ) {
 void generate_key_values(long p, long q, long* n, long* s, long* u){
     *n = p * q;
     long t = (p-1)*(q-1);
-    long v = 0;
+    long v;
     *s = rand()%t;
     while(extended_gcd(*s,t,u,&v)!=1){
         *s = rand()%t;
@@ -59,7 +59,7 @@ char* decrypt(long* crypted, int size, long u, long n){
     long cour;
     for(int i = 0; i < size ; i++){
         cour = crypted[i];
-        decoded[i] = (char) modpow(cour, u,n); //formule donnée dans l'énoncé
+        decoded[i] = (char) modpow(cour,u,n); //formule donnée dans l'énoncé
     }
     printf("\n");
 

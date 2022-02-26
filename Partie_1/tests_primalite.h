@@ -7,10 +7,10 @@
 /*Fonction calculant de manière naïve si p est est premier (en testant s'il est divisible par tous les entiers inférieurs)*/
 int is_prime_naive(long p);
 
-/*Fonction calculant (a^m)%n de manière naïve*/
+/*Fonction calculant (a^m)%n avec une grande complexité*/
 long modpow_naive(long a, long m, long n);
 
-/*Fonction calculant (a^m)%n*/
+/*Fonction calculant (a^m)%n de manière optimisée*/
 unsigned long modpow(long a, long m, long n);
 
 /*retourne si a est un témoin de p (test de Miller)*/

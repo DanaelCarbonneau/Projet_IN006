@@ -18,15 +18,6 @@ int main (){
     printf ( " cle publique = (% ld , %ld ) \n" ,s , n ) ;
     printf ( " cle prive = (% ld , %ld ) \n" ,u , n ) ;
 
-    printf("verif que s*u mod t = %ld\n ",((s*u)%((p-1)*(q-1))));
-
-    char lettre = 'b';
-    printf("lettre à coder : %c",lettre);
-    long code = modpow((long)lettre,s,n);
-    print_long_vector(&code,1);
-    char decode = (char) modpow(code,u,n);
-    printf("caractère décodé : %c\n",decode);
-
     char message [999] = "Hello";
     int len = strlen ( message ) ;
     //Chiffrement:
