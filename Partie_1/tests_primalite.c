@@ -114,7 +114,7 @@ long pow_2(int pow){
 
 long random_prime_number(int low_size, int up_size, int k){
 	long low = pow_2(low_size);
-	long up = pow_2(up_size+1)-1;
+	long up = pow_2(up_size)-1;
 
 	long p = rand_long(low,up);
 	int cpt = 0;
