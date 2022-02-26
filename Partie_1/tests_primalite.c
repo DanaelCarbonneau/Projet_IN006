@@ -34,7 +34,7 @@ long modpow_naive(long a, long m, long n){
 	return res;
 }
 
-/*Complexité : m multiplications + m modulos = en téta(m)*/
+/*Version plus efficace de modpow, récursive, procédant par élévation au carré*/
 
 
 unsigned long modpow(long a, long m, long n){
