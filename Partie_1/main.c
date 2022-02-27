@@ -48,7 +48,7 @@ int main(){
     				/*Temps de calcul pour le test naïf de primalité*/
 
 			    	temps_intervalle = 0;
-			    	a = 99999;
+			    	a = 10000;
 			    	printf("%d\n\n",is_prime_naive(a));
 			    	n = a;
 			    	while (temps_intervalle < 0.002){
