@@ -37,7 +37,7 @@ long modpow_naive(long a, long m, long n){
 /*Version plus efficace de modpow, récursive, procédant par élévation au carré*/
 
 
-int modpow(long a, long m, long n){
+long modpow(long a, long m, long n){
 	if (m==0){
 		printf("Valeur de m non possible ! m > 0");
 		return 1%n;
