@@ -1,0 +1,5 @@
+set terminal postscript portrait 
+set output "courbe_modpow_cmp.ps"
+set size 1.5, 0.7
+plot "ComparaisonModPow.txt" using 1:2 title "modpow (naive)" with lines
+replot "ComparaisonModPow.txt" using 1:3 title "modpow (opti)" with lines

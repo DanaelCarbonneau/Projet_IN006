@@ -7,13 +7,13 @@
 
 #define OCCURENCE_TEST_TEMPS 1000000000
 #define A 11
-#define N 3
-#define M_MAX 5000
+#define N 10
+#define M_MAX 1000
 
 void menu(){
 	printf("0 - Sortie du programme\n");
 	printf("1 - Quel est le plus grand nombre premier que vous arrivez `a tester en moins de 2 milliemes de seconde avec la fonction is_prime_naive(long p) ?\n");
-	printf("2 - Comparer les performances des deux m ́ethodes d’exponentiation modulaire en traçant des courbes de temps en fonction de m\n");
+	printf("2 - Comparer les performances des deux m ́ethodes d’exponentiation modulaire en traçant des courbes de temps de calcul en fonction de m\n");
 	printf("3 - Retourner un nombre premier de taille comprise entre low_size et up_size en utilisant le test de Miller-Rabin\n");
 }
 
@@ -97,6 +97,7 @@ int main(){
 				}
 
 				fclose(f_comp_modpow);
+				system("gnuplot commande.txt");		//Met à jour le graphique grâce au fichier commande.txt
 				break;
 			case 3:
 				low_size = 10;
