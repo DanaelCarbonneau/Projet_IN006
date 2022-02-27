@@ -37,7 +37,7 @@ long modpow_naive(long a, long m, long n){
 /*Version plus efficace de modpow, récursive, procédant par élévation au carré*/
 
 
-unsigned long modpow(long a, long m, long n){
+int modpow(long a, long m, long n){
 	if (m==0){
 		printf("Valeur de m non possible ! m > 0");
 		return 1%n;
@@ -46,11 +46,13 @@ unsigned long modpow(long a, long m, long n){
 		return a%n;
 	}else{
 		if (m%2 == 0){
-			unsigned long b = modpow(a,m/2,n);
+			long b = modpow(a,m/2,n);
+            printf("Valeur de b à l'étape %ld : %ld\n",m,b);
 			return (b*b)%n;
 		}else{
-			unsigned long b = modpow(a, ((m-1)/2) , n);
-			return (((a*b)%n)*b)%n;
+			long b = modpow(a, ((m-1)/2) , n);
+            printf("Valeur de b à l'étape %ld : %ld\n",m,b);
+			return ((a*b%n)*b)%n;
 		}
 	}
 }
