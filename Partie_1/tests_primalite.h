@@ -11,7 +11,7 @@ int is_prime_naive(long p);
 long modpow_naive(long a, long m, long n);
 
 /*Fonction calculant (a^m)%n de manière optimisée*/
-int modpow(long a, long m, long n);
+long modpow(long a, long m, long n);
 
 /*retourne si a est un témoin de p (test de Miller)*/
 int witness ( long a , long b , long d , long p );
