@@ -1,0 +1,5 @@
+set terminal postscript portrait
+set output "comparaisonModpow.ps"
+set size 1, 1
+plot "ComparaisonModPow.txt" using 1:2 title "Algo1" with lines
+replot "ComparaisonModPow.txt" using 1:3 title "Algo2" with lines
