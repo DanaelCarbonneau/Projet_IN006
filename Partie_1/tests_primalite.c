@@ -47,11 +47,11 @@ long modpow(long a, long m, long n){
 	}else{
 		if (m%2 == 0){
 			long b = modpow(a,m/2,n);
-            printf("Valeur de b à l'étape %ld : %ld\n",m,b);
+            //printf("Valeur de b à l'étape %ld : %ld\n",m,b);
 			return (b*b)%n;
 		}else{
 			long b = modpow(a, ((m-1)/2) , n);
-            printf("Valeur de b à l'étape %ld : %ld\n",m,b);
+            //printf("Valeur de b à l'étape %ld : %ld\n",m,b);
 			return ((a*b%n)*b)%n;
 		}
 	}
