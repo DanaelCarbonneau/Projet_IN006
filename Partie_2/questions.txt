@@ -1,0 +1,5 @@
+1/ Est-ce que sprintf met bien le caractère vide à la fin de la chaîne ?
+
+2/ Comment est-ce qu'on gère l'arborescence / Comment organiser ses préambules et headers ?
+
+3/ BESOIN D'AIDE SUR LE MAKEFILE

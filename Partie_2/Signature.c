@@ -1,10 +1,9 @@
 #include <string.h>
+#include<stdlib.h>
+#include<stdio.h>
 #include "gestion_cryptage.h"
-
-typedef struct _signature{
-	long* contenu;
-	int longueur;
-}Signature;
+#include "gestion_clef.h"
+#include"Signature.h"
 
 Signature* init_signature(long* content, int size){
 	Signature* sign = (Signature*)(malloc(sizeof(Signature)));
@@ -20,12 +19,12 @@ Signature* sign(char* mess, Key* sKey){
 }
 
 char* signature_to_str(Signature* sgn){
-	char* result = malloc (10*sgn->size*sizeof(char));
+	char* result = malloc (10*sgn->longueur*sizeof(char));
 	result [0]= '#' ;
 	int pos = 1;
 	char buffer[156];
-	for (int i = 0; i < sgn->size; i ++){
-		sprintf(buffer,"%lx", sgn->content[i]);
+	for (int i = 0; i < sgn->longueur; i ++){
+		sprintf(buffer,"%lx", sgn->contenu[i]);
 		for (int j = 0; j < strlen(buffer) ; j ++){
 			result [pos] = buffer [j];
 			pos = pos +1;
@@ -68,7 +67,7 @@ typedef struct _protected{
 }Protected;
 
 Protected* init_protected(Key* pKey, char* mess, Signature* sgn){
-	Protected* p = (Protected*)(malloc(sizeof(Protected)));
+	Protected* p = (Protected*)(malloc(longueurof(Protected)));
 	p->pKey = pKey;
 	p->mess = strdup(mess); //???RevoirLePartieldeCLOL
 	p->sgn = sgn;

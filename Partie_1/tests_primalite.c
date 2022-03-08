@@ -50,8 +50,7 @@ long modpow(long a, long m, long n){
 			return (b*b)%n;
 		}else{
 			long b = modpow(a, ((m-1)/2) , n);
-            //printf("Valeur de b à l'étape %ld : %ld\n",m,b);
-			return (((a*b)%n)*b)%n;
+            return (((a*b)%n)*b)%n;
 		}
 	}
 }
