@@ -17,7 +17,7 @@ void init_key(Key* key, long val, long n){
     key->n = n;
 }
 
-void init_pair_keys(Key* pKey, Key* sKey, long low_size, long up_size){
+void init_pair_keys(Key* pKey, Key* sKey, int low_size, int up_size){
     /*On déclare les variables qui iront dans les clés*/
     long u;
     long s; 
@@ -72,7 +72,7 @@ char* key_to_str(Key* key){
 
     /*On peut calculer la taille de la chaine (x,y) et l'allouer : trois caractères, le caractère d'arrêt, et les chiffres de x et y*/
     taille_chaine = 4 + taille_val + taille_n;
-    char* chaine_res = malloc(taille_chaine*sizeof(char));
+    char* chaine_res = (char*) malloc(taille_chaine*sizeof(char));
 
     /*On écrit au bon format dans chaine_res*/
     sprintf(chaine_res,"(%lx,%lx)",key->val,key->n);
@@ -93,7 +93,7 @@ Key* str_to_key(char* str){
     }
 
     /*On alloue la clé et on intialise ses valeurs*/
-    Key* cle_res = malloc(sizeof(cle_res));
+    Key* cle_res =(Key*) malloc(sizeof(cle_res));
     init_key(cle_res,val,n);
 
     return cle_res;

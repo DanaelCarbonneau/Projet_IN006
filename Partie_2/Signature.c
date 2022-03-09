@@ -1,8 +1,8 @@
 #include <string.h>
 #include<stdlib.h>
 #include<stdio.h>
-#include "gestion_cryptage.h"
-#include "gestion_clef.h"
+#include"gestion_cryptage.h"
+#include"gestion_clef.h"
 #include"Signature.h"
 
 Signature* init_signature(long* content, int size){
@@ -14,12 +14,11 @@ Signature* init_signature(long* content, int size){
 
 Signature* sign(char* mess, Key* sKey){
 	long* coded = encrypt(mess,sKey->val,sKey->n);
-	//checker cohérence des champs de sKey avec partie 1
 	return init_signature(coded,strlen(mess));
 }
 
 char* signature_to_str(Signature* sgn){
-	char* result = malloc (10*sgn->longueur*sizeof(char));
+	char* result = (char*) malloc (10*sgn->longueur*sizeof(char));
 	result [0]= '#' ;
 	int pos = 1;
 	char buffer[156];
@@ -60,16 +59,10 @@ Signature* str_to_signature(char* str){
 	return init_signature(content,num);
 }
 
-typedef struct _protected{
-	Key* pKey;
-	char* mess;
-	Signature* sgn;
-}Protected;
-
 Protected* init_protected(Key* pKey, char* mess, Signature* sgn){
-	Protected* p = (Protected*)(malloc(longueurof(Protected)));
+	Protected* p = (Protected*)(malloc(sizeof(Protected)));
 	p->pKey = pKey;
-	p->mess = strdup(mess); //???RevoirLePartieldeCLOL
+	p->mess = strdup(mess); 
 	p->sgn = sgn;
 }
 
@@ -77,9 +70,44 @@ int verify(Protected* pr){
 	Signature* sgn = pr->sgn;
 	Key* k = pr->pKey;
 	char* mess_decrypte = decrypt(sgn->contenu,sgn->longueur,k->val,k->n);
-	//CHECKER PAREIL SI COHERENT AVEC STRCUT KEY
 	return strcmp(mess_decrypte,pr->mess);
 }
+
+
+char* protected_to_str(Protected* protected){
+
+	/*On récupère les chaines de caractère de la clé et de la signature*/
+	char* cle = key_to_str(protected->pkey);
+	char* signature = signature_to_str(protected->sgn);
+
+	/*On récupère la taille à allouer et on fait l'allocation (les chaînes, trois espaces et le caractère d'arrêt)*/
+	int taille_allocation = strlen(cle)+strlen(protected->mess)+strlen(signature)+3;
+	char * res = (char*) malloc(taille_allocation*sizeof(char));
+
+	sprintf(res,"%s %s %s",cle,protected->mess,signature);
+
+	return res;
+}
+
+Protected* str_to_protected(char* chaine){
+	/*On alloue le résultat*/
+	Protected* res =(Protected*) malloc(sizeof(Protected));
+
+	char* cle;
+	char* message;
+	char* signature;
+
+	/*On récupère les trois chaînes de caractère à l'aide du formatage*/
+	if(sscanf(chaine,"%s %s %s",cle,message,signature)!=3){
+		printf("Erreur dans le formatage !\n");
+		return NULL;
+	}
+
+	/*On initialise et retourne le protected*/
+
+	return init_protected(str_to_key(cle),message,str_to_signature(signature));
+}
+
 
 
 
