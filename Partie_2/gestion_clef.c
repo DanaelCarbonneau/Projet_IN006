@@ -41,7 +41,7 @@ void init_pair_keys(Key* pKey, Key* sKey, int low_size, int up_size){
 
 char* key_to_str(Key* key){
 
-    if(key = NULL){
+    if(key == NULL){
         printf("Erreur : clé vide!\n");
         return NULL;
     }
@@ -52,30 +52,23 @@ char* key_to_str(Key* key){
     long val = key->val;        //On récupère les valeurs de la clé afin de savoir la taille nécessaire pour la chaîne à allouer
     long n = key->n;
 
-    while ((val >0) || (n>0)){
-        
-        if(val>0){
-            taille_val++;
-            val = val/10;           //Division par 10 pour savoir combien de chiffres sont présents dans val
-        }
-        
-        if (n>0){
-            taille_n++;
-            n = n/10;               //Division par 10 pour savoir combien de chiffres sont présents dans val
-        }
-        
-    }
-
+    
+   
+    
     /*On peut calculer la taille de la chaine (x,y) et l'allouer : trois caractères, le caractère d'arrêt, et les chiffres de x et y*/
-    taille_chaine = 4 + taille_val + taille_n;
-    char* chaine_res = (char*) malloc(taille_chaine*sizeof(char));
+    char buffer[256];
+    char* chaine_res;
 
     /*On écrit au bon format dans chaine_res*/
-    sprintf(chaine_res,"(%lx,%lx)",key->val,key->n);
+    sprintf(buffer,"(%lx,%lx)%c",key->val,key->n,'\0');
+
+    chaine_res = strdup(buffer);
 
     /*On peut retourner la chaîne*/
     return chaine_res;    
 }
+
+    
 
 Key* str_to_key(char* str){
     /*On déclare les deux variables servant à récupérer nos valeurs*/
