@@ -4,7 +4,7 @@
 #include <string.h>
 #include<stdlib.h>
 #include<stdio.h>
-#include"gestion_cryptage.h"
+#include"../Partie_1/gestion_cryptage.h"
 #include"gestion_clef.h"
 
 /*Structure contenant un tableau de longs représentant une signature*/

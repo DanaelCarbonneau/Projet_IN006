@@ -3,6 +3,11 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+
+#include "../Partie_1/tests_primalite.h"
+#include "../Partie_1/gestion_cryptage.h"
+
 
 typedef struct _key{
     long val;

@@ -1,8 +1,4 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
 #include"gestion_clef.h"
-#include "tests_primalite.h"
 
 
 void init_key(Key* key, long val, long n){
@@ -30,7 +26,7 @@ void init_pair_keys(Key* pKey, Key* sKey, int low_size, int up_size){
         q = random_prime_number (3 ,7 , 5000);
     }
 
-    generate_keys_values (p ,q ,&n ,&s ,&u) ;               //On génère les valeurs des clés selon le protocole RSA
+    generate_key_values (p ,q ,&n ,&s ,&u) ;               //On génère les valeurs des clés selon le protocole RSA
     //Pour avoir des cles positives :
     if (u <0) {
         long t = (p -1) *( q -1) ;                      //(lignes 33 à 36 directement tirés du main fourni dans l'énoncé de la partie 1)

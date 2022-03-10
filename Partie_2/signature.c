@@ -1,9 +1,5 @@
-#include <string.h>
-#include<stdlib.h>
-#include<stdio.h>
-#include"gestion_cryptage.h"
-#include"gestion_clef.h"
-#include"Signature.h"
+
+#include"signature.h"
 
 Signature* init_signature(long* content, int size){
 	Signature* sign = (Signature*)(malloc(sizeof(Signature)));
@@ -77,7 +73,7 @@ int verify(Protected* pr){
 char* protected_to_str(Protected* protected){
 
 	/*On récupère les chaines de caractère de la clé et de la signature*/
-	char* cle = key_to_str(protected->pkey);
+	char* cle = key_to_str(protected->pKey);
 	char* signature = signature_to_str(protected->sgn);
 
 	/*On récupère la taille à allouer et on fait l'allocation (les chaînes, trois espaces et le caractère d'arrêt)*/
