@@ -1,5 +1,3 @@
-
-
 #include"gestion_votants_candidats.h"
 
 
@@ -26,7 +24,8 @@ Votant* generation_fichier_votants(int nv){
 void liberer_votants(Votant* tabV, int nv){
     for(int i = 0 ; i < nv ; i++){
         free(tabV[i].pKey);
-        free(tabV[i].sKey);        
+        free(tabV[i].sKey);      
+        free(tabV[i]);  
     }
     free(tabV);
 }
@@ -94,6 +93,6 @@ void generate_random_data(int nv, int nc){
     liberer_votants(tabv,nv);
     free(tabc);                 //La mémoire allouée aux clés a été libérée dans liberer_votants
 
-
+fclose
 
 }

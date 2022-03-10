@@ -4,6 +4,5 @@
 
 3/ BESOIN D'AIDE SUR LE MAKEFILE
 
-4/ Candidats parmi les votants ? Utilité du tableau de tuples ?
 
-5/Revoir la gestion des fuites mémoires !!!
+4/Revoir la gestion des fuites mémoires !!!

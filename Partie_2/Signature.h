@@ -1,11 +1,11 @@
+#ifndef SIGNATUREH
+#define SIGNATUREH
+
 #include <string.h>
 #include<stdlib.h>
 #include<stdio.h>
 #include"gestion_cryptage.h"
 #include"gestion_clef.h"
-
-#ifndef SIGNATUREH
-#define SIGNATUREH
 
 /*Structure contenant un tableau de longs représentant une signature*/
 typedef struct _signature{

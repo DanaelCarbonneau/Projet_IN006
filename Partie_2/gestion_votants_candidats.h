@@ -1,88 +1,34 @@
+#ifndef GESTION_VOTANTS_CANDIDATSH
+#define GESTION_VOTANTS_CANDIDATSH
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
 #include"gestion_clef.h"
 #include"Signature.h"
 
+/*Structure représentant un votant par sa clé et un flag indiquant s'il est candidat*/
 typedef struct _votant{
     Key* pKey;
     Key* sKey;
     int est_candidat;
-    Protected* declaration_signee;
 }Votant;
 
 
 
+/*Fonction permettant de générer un fichier avec nv votants ainsi qu'un tableau les listant*/
+Votant* generation_fichier_votants(int nv);
 
-Votant* generation_fichier_votants(int nv){
-    FILE* fichier_votant = fopen("keys.txt","w");
+/*Fonction permettant de libérer un tableau de votants*/
+void liberer_votants(Votant* tabV, int nv);
 
-    /*On créé un tableau de nv couples de clés représentant nos nv votans*/
 
-    Votant* tabV = (Votant*) malloc(nv* sizeof(Votant));
+/*Fonction générant un fichier, et un tableau de nc votants à partir d'un tableau de candidats. Un candidat est représenté
+par une clé, chaque case du tableau pointe donc sur un candidat*/
+Key** generation_fichier_candidats(int nc, Votant*tabV,int nv);
 
-    /*remplissage du tableau et écriture dans le fichier*/
-    for(int i = 0; i < nv ; i++){
-        tabV[i].pKey = (Key*) malloc(sizeof(Key));
-        tabV[i].sKey = (Key*) malloc(sizeof(Key));
-        tabV[i].est_candidat = 0;
-        init_pair_keys(tabV[i].pKey,tabV[i].sKey,3,7);
-        fprintf(fichier_votant,"pKey : %s, sKey : %s\n",key_to_str(tabV[i].pKey),key_to_str(tabV[i].sKey));
-    }
-
-    fclose(fichier_votant);
-    return tabV;
-}
-
-void liberer_votants(Votant* tabV, int nv){
-    for(int i = 0 ; i < nv ; i++){
-        free(tabV[i].pKey);
-        free(tabV[i].sKey);        
-    }
-    free(tabV);
-}
-
-Key** generation_fichier_candidats(int nc, Votant*tabV,int nv){
-    int tirage;
-    
-    if(nc > nv){
-        printf("Il y a plus de candidats que de votants ! erreur ! Nous ne prendrons que nv candidats.\n");
-        nc = nv;
-    }
-    FILE* fichier_candidat = fopen("candidates.txt","w");
-
-    Key** tabC = (Key**) malloc(nc * sizeof(Key*));
-
-    for(int i = 0 ; i < nc ; i++){
-        tirage = rand()%nv;             //On va sur une case aléatoire du tableau
-        Votant candidat_potentiel = tabV[tirage];
-
-        while(candidat_potentiel.est_candidat!=0){      //On vérifie que le votant choisi aléatoirement n'est pas déjà candidat
-            tirage = rand()%nv;             //La boucle termine bien car nc <= nv, il n'est donc pas possible que tous les votants soient déjà candidats lorsqu'on passe dans la boucle
-            candidat_potentiel = tabV[tirage];
-        }
-        tabV[tirage].est_candidat = 1;           //Désormais le votant est candidat, on met à jour ses infos dans tabV.
-
-        tabC[i] = &candidat_potentiel.pKey;      //On stocke la clé publique du candidat
-        fprintf(fichier_candidat,"pKey : %s\n",key_to_str(tabC[i]));
-    }
-
-    fclose(fichier_candidat);
-    return tabC;
-}
-
-Protected* emission_vote(Votant electeur, Key** tabC,int nc){
-    /*On tire un vote au hasard*/
-    int tirage = rand()%nc;
-    char* declaration = key_to_str(tabC[tirage]);
-
-    Protected* declaration_vote = (Protected*) malloc(sizeof(Protected));
-
-    /*On initialise tous les champs de notre protected*/
-
-    declaration_vote = init_protected(electeur.pKey,declaration,sign(declaration,electeur.sKey));
-    return declaration_vote;
-}
+/*Fonction émettant un protected représentant le vote d'un Votant electeur pour un candidat tiré aléatoirement dans tabC*/
+Protected* emission_vote(Votant electeur, Key** tabC,int nc);
 
 
 
@@ -96,3 +42,5 @@ par ligne),
 — crée un fichier declarations.txt contenant toutes les déclarations signées (une déclaration
 par ligne).*/
 void generate_random_data(int nv, int nc);
+
+#endif

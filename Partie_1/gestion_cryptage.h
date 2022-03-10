@@ -1,11 +1,13 @@
 /*--- Préambule ---*/
+#ifndef GESTION_CRYPTAGEH
+#define GESTION_CRYPTAGEH
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
 #include"tests_primalite.h"
 
-#ifndef GESTION_CLEH
-#define GESTION_CLEH
+
 
 /*Fonction calculant PGDC(s,t) et les deux long u, v tels que s ×u + t × v = PGCD(s, t)*/
 long extended_gcd ( long s , long t , long *u , long * v );
