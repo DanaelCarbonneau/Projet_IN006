@@ -66,7 +66,7 @@ int verify(Protected* pr){
 	Signature* sgn = pr->sgn;
 	Key* k = pr->pKey;
 	char* mess_decrypte = decrypt(sgn->contenu,sgn->longueur,k->val,k->n);
-	return strcmp(mess_decrypte,pr->mess);
+	return (!strcmp(mess_decrypte,pr->mess));		//strcmp nous renvoie 0, c'est à dire faux, lorsque nos chaines sont identiques
 }
 
 
