@@ -35,7 +35,7 @@ void init_pair_keys(Key* pKey, Key* sKey, int low_size, int up_size){
 
     /*On peut maintenant intialiser les valeurs de nos deux clés*/
     init_key(pKey,s,n);
-    init_key(pKey,u,n);
+    init_key(sKey,u,n);
 
 }
 
