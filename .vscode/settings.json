@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "gestion_cryptage.h": "c",
-        "gestion_clef.h": "c"
-    }
-}
