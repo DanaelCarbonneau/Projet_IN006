@@ -4,6 +4,8 @@
 
 #include"gestion_clef.h"
 #include "gestion_votants_candidats.h"
+#include"signature.h"
+
 #include"../Partie_1/gestion_cryptage.h"
 #include"../Partie_1/tests_primalite.h"
 
