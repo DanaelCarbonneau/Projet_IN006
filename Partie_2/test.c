@@ -25,7 +25,6 @@ int main ( void ) {
 
     char * chaine = key_to_str( pKey ) ;
     
-    printf("Si c'est le truc là où le prof a dit qu'il y avait pas de faute je me tire une balle\n");
     printf("key_to_str : %s \n" , chaine ) ;
     Key * k = str_to_key( chaine ) ;
     printf("str_to_key : (%lx , %lx) \n" , k-> val , k-> n ) ;
