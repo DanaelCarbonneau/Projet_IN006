@@ -78,7 +78,8 @@ Key* str_to_key(char* str){
     /*On récupère et vérifie le formattage*/
 
     if(sscanf(str,"(%lx,%lx)",&val,&n)!=2){
-        printf("Erreur d'affichage !!\n");
+        printf("Erreur de formatage !\n");
+        return NULL;
     }
 
     /*On alloue la clé et on intialise ses valeurs*/
