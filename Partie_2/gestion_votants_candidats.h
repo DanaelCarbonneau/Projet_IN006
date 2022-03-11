@@ -5,7 +5,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include"gestion_clef.h"
-#include"Signature.h"
+#include"signature.h"
 
 /*Structure représentant un votant par sa clé et un flag indiquant s'il est candidat*/
 typedef struct _votant{
