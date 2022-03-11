@@ -3,10 +3,10 @@
 #include<time.h>
 
 #include"gestion_clef.h"
-#include"signature.h"
-#include"gestion_cryptage.h"
-#include"tests_primalite.h"
 #include "gestion_votants_candidats.h"
+#include"../Partie_1/gestion_cryptage.h"
+#include"../Partie_1/tests_primalite.h"
+
 
 
 int main ( void ) {
