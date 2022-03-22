@@ -1,3 +1,5 @@
+#include "chaine_cle.h"
+
 CellKey* create_cell_key(Key* key){
 	CellKey* nouv = (CellKey*)malloc(sizeof(CellKey));
 	if (nouv == NULL){
