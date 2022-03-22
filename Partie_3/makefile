@@ -11,6 +11,8 @@ test.o : test.c chaine_cle.h
 chaine_cle.o : chaine_cle.c chaine_cle.h ../Partie_2/gestion_clef.h
 	gcc -c chaine_cle.c
 
+chaine_protected.o : chaine_protected.c chaine_protected.h ../Partie_2/signature.h
+	gcc -c chaine_protected.c
 
 
 #Fichiers de la partie 2 nécessaires
