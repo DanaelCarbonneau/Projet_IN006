@@ -1,6 +1,6 @@
 #include "chaine_protected.h"
 
-CellProtected* create_cell_protected(Protected* protected){
+CellProtected* create_cell_protected(Protected* pr){
 	CellProtected* nouv = (CellProtected*)malloc(sizeof(CellProtected));
 	if (nouv == NULL){
 		printf("Erreur à l'allocation.");
@@ -38,7 +38,7 @@ CellProtected* read_protected(){
 }
 
 void print_list_protected(CellProtected* LCP){
-    CellProtected* courant = LCK;
+    CellProtected* courant = LCP;
     while (courant){
         printf("%s",protected_to_str(courant->data));
         courant = courant->next;
