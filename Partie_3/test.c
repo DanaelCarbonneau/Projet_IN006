@@ -3,7 +3,6 @@
 
 int main(){
 
-
     CellKey* chaine = read_public_keys("../Partie_2/candidates.txt");
 
     print_list_keys(chaine);
