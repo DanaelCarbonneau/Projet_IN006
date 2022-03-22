@@ -89,9 +89,9 @@ Protected* str_to_protected(char* chaine){
 	/*On alloue le résultat*/
 	Protected* res =(Protected*) malloc(sizeof(Protected));
 
-	char* cle;
-	char* message;
-	char* signature;
+	char cle[256];
+	char message[256];
+	char signature[256];
 
 	/*On récupère les trois chaînes de caractère à l'aide du formatage*/
 	if(sscanf(chaine,"%s %s %s",cle,message,signature)!=3){
@@ -104,6 +104,15 @@ Protected* str_to_protected(char* chaine){
 	return init_protected(str_to_key(cle),message,str_to_signature(signature));
 }
 
-
+void liberer_signature(Signature* sgn){
+	free(sgn->contenu);
+	free(sgn);
+}
+void liberer_protected(Protected*pr){
+	free(pr->mess);
+	free(pr->pKey);
+	liberer_signature(pr->sgn);
+	free(pr);
+}
 
 

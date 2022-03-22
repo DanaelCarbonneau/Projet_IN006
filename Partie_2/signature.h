@@ -51,4 +51,11 @@ char* protected_to_str(Protected* protected);
 Protected* str_to_protected(char* chaine);
 
 
+/*Fonction permettant de libérer la mémoire allouée à une signature sgn*/
+void liberer_signature(Signature* sgn);
+
+/*Fonction permettant de libérer la mémoire allouée à un protected pr*/
+void liberer_protected(Protected* pr);
+
+
 #endif
