@@ -29,7 +29,7 @@ CellKey* read_public_keys(char* nom_fichier){
 	char key_char[128];
 	char bin[128];
 	while (fgets(ligne, 256,f)!=NULL){
-		if (sscanf(ligne, "%s : %s, %s",bin,key_char,bin) == 3){
+		if (sscanf(ligne, "%s : %s",bin,key_char) == 2){
 			CellKey* nouv = create_cell_key(str_to_key(key_char));
 			liste = ajoutEnTete(nouv);
 		}else{
