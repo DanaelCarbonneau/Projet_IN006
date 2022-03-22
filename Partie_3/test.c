@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include"chaine_cle.h"
+#include"chaine_protected.h"
 
 int main(){
 
