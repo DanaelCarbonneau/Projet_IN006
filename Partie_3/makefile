@@ -2,10 +2,10 @@ all : test
 
 #Compilation de la partie
 
-test : test.o chaine_cle.o	signature.o gestion_clef.o gestion_cryptage.o tests_primalite.o
-	gcc -o test test.o chaine_cle.o signature.o gestion_clef.o gestion_cryptage.o tests_primalite.o
+test : test.o chaine_cle.o chaine_protected.o signature.o gestion_clef.o gestion_cryptage.o tests_primalite.o
+	gcc -o test test.o chaine_cle.o chaine_protected.o signature.o gestion_clef.o gestion_cryptage.o tests_primalite.o
 
-test.o : test.c chaine_cle.h
+test.o : test.c chaine_cle.h chaine_protected.o
 	gcc -c test.c
 
 chaine_cle.o : chaine_cle.c chaine_cle.h ../Partie_2/gestion_clef.h
