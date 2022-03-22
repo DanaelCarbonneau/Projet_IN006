@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #include"chaine_cle.h"
 
@@ -31,6 +32,10 @@ void delete_list_keys(CellKey*LCK){
     }    
 }
 =======
+=======
+#include "chaine_cle.h"
+
+>>>>>>> 397424d0cb0ab0a40115f9205f0f6876fe1b21c0
 CellKey* create_cell_key(Key* key){
 	CellKey* nouv = (CellKey*)malloc(sizeof(CellKey));
 	if (nouv == NULL){
