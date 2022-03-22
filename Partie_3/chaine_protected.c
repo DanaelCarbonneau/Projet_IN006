@@ -18,7 +18,7 @@ CellProtected* ajoutEnTete_protected(Protected* pr, CellProtected* liste){
 
 
 CellProtected* read_protected(){
-	File* f = fopen("../Partie_2/declarations.txt","r");
+	FILE* f = fopen("../Partie_2/declarations.txt","r");
 	if (f==NULL){
 		printf("Erreur d'ouverture du fichier.");
 	}
