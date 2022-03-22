@@ -29,9 +29,9 @@ CellKey* read_public_keys(char* nom_fichier){
 	char key_char[128];
 	char bin[128];
 	while (fgets(ligne, 256,f)!=NULL){
-		if (sscanf(ligne, "%s : %s, %s",bin,key_char,bin) == 3){
-			CellKey* nouv = create_cell_key(str_to_key(key_char));
-			liste = ajoutEnTete(nouv);
+		if (sscanf(ligne, "%s : %s",bin,key_char) == 2){
+			Key* nouv = str_to_key(key_char);
+			liste = ajoutEnTete(nouv, liste);
 		}else{
 			printf("Erreur de formatage!");
 		}
@@ -51,7 +51,7 @@ void print_list_keys(CellKey* LCK){
 
 
 void delete_cell_key(CellKey* c){
-    free(c->data);
+    free(c->data);		//Pas besoin de plus ! les données à l'intérieur de la clé sont statiques
     free(c);
 }
 
