@@ -30,14 +30,10 @@ CellKey* read_public_keys(char* nom_fichier){
 	char bin[128];
 	while (fgets(ligne, 256,f)!=NULL){
 		if (sscanf(ligne, "%s : %s",bin,key_char) == 2){
-<<<<<<< HEAD
 			Key* nouv = str_to_key(key_char);
 			liste = ajoutEnTete(nouv, liste);
-=======
-			CellKey* nouv = create_cell_key(str_to_key(key_char));
-			liste = ajoutEnTete(nouv);
->>>>>>> 93c244ed2401cbabb512d1ae229fadc9996d9140
-		}else{
+		}
+		else{
 			printf("Erreur de formatage!");
 		}
 	}
