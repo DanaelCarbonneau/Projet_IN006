@@ -24,16 +24,11 @@ CellProtected* read_protected(){
 	}
 	CellProtected* liste = NULL;
 	char ligne[256];
-	char pr_char[128];
-	char bin[128];
 	while (fgets(ligne, 256,f)!=NULL){
-		if (sscanf(ligne, "%s %s %s",bin,bin,pr_char) == 3){
-			Protected* nouv = str_to_protected(pr_char);
-			liste = ajoutEnTete_protected(nouv,liste);
-		}else{
-			printf("Erreur de formatage!");
-		}
+		Protected* nouv = str_to_protected(ligne);
+		liste = ajoutEnTete_protected(nouv,liste);
 	}
+	fclose(f);
 	return liste;
 }
 
@@ -55,9 +50,33 @@ void delete_cell_protected(CellProtected* c){
 
 void delete_list_protected(CellProtected* LCP){
     CellProtected* courant = LCP;
+    CellProtected* tmp;
     while (courant){
-        courant = LCP;
-        LCP = LCP->next;
+        tmp = courant->next;
         delete_cell_protected(courant);
-    }    
+        courant = tmp;
+    }     
 }
+
+CellProtected* supprimer_fausses_declarations(CellProtected* LCP){
+	CellProtected* courant = LCP;
+	CellProtected* prec = NULL;
+	CellProtected* res = LCP;
+	while (courant){
+		while (courant && verify(courant->data)){
+			prec = courant;
+			courant = courant->next;
+		}
+		if (courant && (prec == NULL)){
+			res = courant->next;
+			delete_cell_protected(courant);
+			courant = res;
+		}
+		else if (courant){
+			prec->next = courant->next;
+			delete_cell_protected(courant);
+			courant = prec->next;
+		}
+	} return res;
+}
+
