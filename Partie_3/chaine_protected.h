@@ -35,6 +35,10 @@ void delete_cell_protected(CellProtected* c);
 /*Fonction qui supprime une liste chainée de protected LCP*/
 void delete_list_protected(CellProtected* LCP);
 
+/*Fonction qui supprime les fausses déclarations présentes dans une liste chainée de protected LCP*/
+CellProtected* supprimer_fausses_declarations(CellProtected* LCP);
+
+
 
 
 
