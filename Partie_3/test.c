@@ -2,13 +2,19 @@
 #include"chaine_cle.h"
 
 int main(){
+    CellKey* chaine_cle = read_public_keys("../Partie_2/candidates.txt");
 
-    printf("c'est la 1 ?\n");
-    CellKey* chaine = read_public_keys("../Partie_2/candidates.txt");
+    print_list_keys(chaine_cle);
 
-    printf("C'et la 2 ?\n");
-    print_list_keys(chaine);
+    delete_list_keys(chaine_cle);
+    
+    CellProtected* chaine_pr = read_protected();
+    
+    print_list_protected(chaine_pr);
 
-    printf("C'est la 3?\n");
-    delete_list_keys(chaine);
+    chaine_pr = supprimer_fausses_declarations(chaine_pr);
+
+    print_list_protected(chaine_pr);
+    
+    delete_list_protected(chaine_pr);
 }

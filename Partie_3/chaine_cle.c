@@ -45,10 +45,10 @@ CellKey* read_public_keys(char* nom_fichier){
 void print_list_keys(CellKey* LCK){
     CellKey* courant = LCK;
     while (courant){
-		char* str = key_to_str(courant->data);
+	char* str = key_to_str(courant->data);
         printf("%s",str);
         courant = courant->next;
-		free(str);
+	free(str);
     }
 	printf("\n");
 }
@@ -58,15 +58,16 @@ void print_list_keys(CellKey* LCK){
 void delete_cell_key(CellKey* c){
     free(c->data);		//Pas besoin de plus ! les données à l'intérieur de la clé sont statiques
     free(c);
-	printf("I");
 }
 
 
 void delete_list_keys(CellKey*LCK){
     CellKey* courant = LCK;
+    CellKey* tmp;
     while (courant){
-		LCK = courant;
-        courant = LCK->next;
-		delete_cell_key(LCK);
+    	tmp = courant->next;
+    	delete_cell_key(courant);
+    	courant = tmp;
+		
     }
 }

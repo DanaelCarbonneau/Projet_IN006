@@ -34,3 +34,6 @@ gestion_cryptage.o : ../Partie_1/gestion_cryptage.c ../Partie_1/gestion_cryptage
 
 tests_primalite.o : ../Partie_1/tests_primalite.c ../Partie_1/tests_primalite.h
 	gcc -c ../Partie_1/tests_primalite.c 
+	
+clean:
+	rm -f *.o test
