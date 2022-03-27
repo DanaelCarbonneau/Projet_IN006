@@ -8,6 +8,16 @@ Signature* init_signature(long* content, int size){
 	return sign;
 }
 
+Signature* deep_copy_sgn(Signature* sgn){
+	Signature* sign = (Signature*) malloc(sizeof(Signature));
+	sign->contenu = (long*) malloc(sgn->longueur *sizeof(long));
+	for(int i = 0 ; i < sgn->longueur; i++){
+		(sign->contenu)[i] = (sgn->contenu)[i];
+	}
+	sign->longueur = sgn->longueur;
+	return sign;
+}
+
 Signature* sign(char* mess, Key* sKey){
 	long* coded = encrypt(mess,sKey->val,sKey->n);
 	return init_signature(coded,strlen(mess));
@@ -57,16 +67,21 @@ Signature* str_to_signature(char* str){
 
 Protected* init_protected(Key* pKey, char* mess, Signature* sgn){
 	Protected* p = (Protected*)(malloc(sizeof(Protected)));
-	p->pKey = pKey;
+	p->pKey = (Key*)malloc(sizeof(Key));
+	init_key(p->pKey,pKey->val,pKey->n);			//On fait une deepcopy de la clé
 	p->mess = strdup(mess); 
-	p->sgn = sgn;
+	p->sgn = deep_copy_sgn(sgn);
+
+	return p;
 }
 
 int verify(Protected* pr){
 	Signature* sgn = pr->sgn;
 	Key* k = pr->pKey;
 	char* mess_decrypte = decrypt(sgn->contenu,sgn->longueur,k->val,k->n);
-	return (!strcmp(mess_decrypte,pr->mess));		//strcmp nous renvoie 0, c'est à dire faux, lorsque nos chaines sont identiques
+	int bon = (!strcmp(mess_decrypte,pr->mess));
+	free(mess_decrypte);
+	return bon;	//strcmp nous renvoie 0, c'est à dire faux, lorsque nos chaines sont identiques
 }
 
 
@@ -81,6 +96,8 @@ char* protected_to_str(Protected* protected){
 	char * res = (char*) malloc(taille_allocation*sizeof(char));
 
 	sprintf(res,"%s %s %s",cle,protected->mess,signature);
+	free(cle);
+	free(signature);
 
 	return res;
 }
@@ -89,19 +106,23 @@ Protected* str_to_protected(char* chaine){
 	/*On alloue le résultat*/
 	Protected* res =(Protected*) malloc(sizeof(Protected));
 
-	char cle[256];
+	char cleS[256];
 	char message[256];
 	char signature[256];
 
 	/*On récupère les trois chaînes de caractère à l'aide du formatage*/
-	if(sscanf(chaine,"%s %s %s",cle,message,signature)!=3){
+	if(sscanf(chaine,"%s %s %s",cleS,message,signature)!=3){
 		printf("Erreur dans le formatage !\n");
 		return NULL;
 	}
 
 	/*On initialise et retourne le protected*/
-
-	return init_protected(str_to_key(cle),message,str_to_signature(signature));
+	Signature* sgn = str_to_signature(signature);
+	Key* cle = str_to_key(cleS);
+	Protected* pr = init_protected(cle,message,sgn);
+	liberer_signature(sgn);
+	free(cle);
+	return pr;
 }
 
 void liberer_signature(Signature* sgn){

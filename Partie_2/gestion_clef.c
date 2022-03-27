@@ -45,17 +45,7 @@ char* key_to_str(Key* key){
         printf("Erreur : clé vide!\n");
         return NULL;
     }
-
-    int taille_chaine;
-    int taille_val;
-    int taille_n;
-    long val = key->val;        //On récupère les valeurs de la clé afin de savoir la taille nécessaire pour la chaîne à allouer
-    long n = key->n;
-
-    
-   
-    
-    /*On peut calculer la taille de la chaine (x,y) et l'allouer : trois caractères, le caractère d'arrêt, et les chiffres de x et y*/
+     
     char buffer[256];
     char* chaine_res;
 

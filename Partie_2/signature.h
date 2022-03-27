@@ -25,6 +25,9 @@ typedef struct _protected{
 /*Fonction permettant d’allouer et de remplir une signature avec un tableau de long déjà alloué et initialisé. */
 Signature* init_signature(long* content, int size);
 
+/*Fonction faisant la deepcopy d'un signature sgn*/
+Signature* deep_copy_sgn(Signature* sgn);
+
 /*Fonction permettant de créer une signature à partir du message mess (déclaration de vote) 
 et de la clé secrète de l’émetteur.*/
 Signature* sign(char* mess, Key* sKey);
@@ -33,6 +36,11 @@ Signature* sign(char* mess, Key* sKey);
 char* signature_to_str(Signature* sgn);
 
 /*Fonction qui transforme une chaîne de caractères en signature*/
+
+/** @brief Fonction qui transforme une chaine ...
+	@param str chaine qui doit être transformée
+	@return Signature* la signature issue de la transformation
+**/
 Signature* str_to_signature(char* str);
 
 /*Fonction permettant d'initaliser et d'allouer la structure protected*/

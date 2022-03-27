@@ -14,7 +14,14 @@ Votant* generation_fichier_votants(int nv){
         tabV[i].sKey = (Key*) malloc(sizeof(Key));
         tabV[i].est_candidat = 0;
         init_pair_keys(tabV[i].pKey,tabV[i].sKey,3,7);
-        fprintf(fichier_votant,"pKey : %s, sKey : %s\n",key_to_str(tabV[i].pKey),key_to_str(tabV[i].sKey));
+
+        char * ktsp = key_to_str(tabV[i].pKey);                         //Permet de gérer les fuites mémoires
+        char * kt2s = key_to_str(tabV[i].sKey);
+
+        fprintf(fichier_votant,"pKey : %s, sKey : %s\n",ktsp,kt2s);
+
+        free(kt2s);
+        free(ktsp);
     }
 
     fclose(fichier_votant);
@@ -28,6 +35,7 @@ void liberer_votants(Votant* tabV, int nv){
     }
     free(tabV);
 }
+
 
 Key** generation_fichier_candidats(int nc, Votant*tabV,int nv){
     int tirage;
@@ -46,7 +54,12 @@ Key** generation_fichier_candidats(int nc, Votant*tabV,int nv){
         tabV[tirage].est_candidat = 1;           //Désormais le votant est candidat, on met à jour ses infos dans tabV.
 
         tabC[i] = candidat_potentiel.pKey;      //On stocke la clé publique du candidat
-        fprintf(fichier_candidat,"pKey : %s\n",key_to_str(tabC[i]));
+
+        char * kts = key_to_str(tabC[i]);               //Gestion de la mémoire
+
+        fprintf(fichier_candidat,"pKey : %s\n",kts);
+
+        free(kts);
     }
 
     fclose(fichier_candidat);
@@ -62,7 +75,11 @@ Protected* emission_vote(Votant electeur, Key** tabC,int nc){
 
     /*On initialise tous les champs de notre protected*/
 
-    declaration_vote = init_protected(electeur.pKey,declaration,sign(declaration,electeur.sKey));
+    Signature* sgn = sign(declaration,electeur.sKey);           //Gestion de la mémoire
+
+    declaration_vote = init_protected(electeur.pKey,declaration,sgn);
+    liberer_signature(sgn);    
+    free(declaration);
     return declaration_vote;
 }
 
@@ -76,21 +93,22 @@ void generate_random_data(int nv, int nc){
     Key** tabc = generation_fichier_candidats(nc,tabv,nv);
 
     FILE* fichier_votes = fopen("declarations.txt","w");
-
+    char* pts;
     for(int i = 0; i < nv ; i++){
         Protected * vote = emission_vote(tabv[i],tabc,nc);
-        char* chaine = protected_to_str(vote);
-        fprintf(fichier_votes,"%s\n",chaine);
 
-        free(vote->mess);
-        free(vote);
-        free(chaine);
+        pts = protected_to_str(vote);         //Gestion de la mémoire
+
+        fprintf(fichier_votes,"%s\n",pts);
+
+        free(pts);
+        liberer_protected(vote);
     }
 
     fclose(fichier_votes);
 
     liberer_votants(tabv,nv);
-    free(tabc);                 //La mémoire allouée aux clés a été libérée dans liberer_votants
+    free(tabc);               //La mémoire allouée aux clés a été libérée dans liberer_votants
 
 
 }
