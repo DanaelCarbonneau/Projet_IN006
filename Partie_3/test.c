@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include"chaine_cle.h"
+#include"chaine_protected.h"
 
 int main(){
     CellKey* chaine_cle = read_public_keys("../Partie_2/candidates.txt");
