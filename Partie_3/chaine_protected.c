@@ -35,15 +35,17 @@ CellProtected* read_protected(){
 void print_list_protected(CellProtected* LCP){
     CellProtected* courant = LCP;
     while (courant){
-        printf("%s",protected_to_str(courant->data));
+		char * str = protected_to_str(courant->data);
+        printf("%s",str);
         courant = courant->next;
+		free(str);
     }
 }
 
 
 
 void delete_cell_protected(CellProtected* c){
-    free(c->data);		//Pas besoin de plus ! les données à l'intérieur de la clé sont statiques
+    liberer_protected(c->data);		
     free(c);
 }
 

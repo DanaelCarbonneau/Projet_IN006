@@ -67,7 +67,6 @@ void delete_list_keys(CellKey*LCK){
     while (courant){
     	tmp = courant->next;
     	delete_cell_key(courant);
-    	courant = tmp;
-		
+    	courant = tmp;	
     }
 }
