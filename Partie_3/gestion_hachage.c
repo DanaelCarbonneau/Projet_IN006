@@ -5,7 +5,7 @@
 HashCell* create_hashcell(Key* key){
     HashCell* res = (HashCell*) malloc(sizeof(HashCell));
     if (res == NULL){
-		printf("Erreur allocation!");
+		printf("Erreur allocation!\n");
 		return NULL;
 	}
     res->key = key;
@@ -42,11 +42,19 @@ int find_position(HashTable* t, Key* key){ /*A revoir !!!*/
 }
 	     
 HashTable* create_hashtable(CellKey* keys, int size){
-	HashTable* h_table = (HashTable*)malloc(sizeof(HashTable));
+
+	HashTable* h_table = (HashTable*)malloc(sizeof(HashTable));     //table créée et retournée
+
+    if(h_table==NULL){
+        printf("Erreur à l'allocation!\n");
+        return NULL;
+    }
+
 	h_table->size = size;
 	h_table->tab = (HashCell**)malloc(size*sizeof(HashCell*));
 
-	/*utile???*/
+	/*E-utile???
+    D- Je pense oui, ça mange pas de pain et on s'assure que les valeurs sont bien nulles, comme on l'utilise après*/
 	for (int i = 0; i < size; i++){
 		h_table->tab[i] = NULL;
 	}
@@ -68,7 +76,8 @@ void delete_hashtable(HashTable* t){
 	for (int i = 0; i < t->size; i++){
 		cell_courant = t->tab[i];
 		if (cell_courant){
-			/*Est-ce qu'on veut free les clés aussi???*/
+			/*E- Est-ce qu'on veut free les clés aussi???     
+             D- Je pense que oui, on a dit qu'on ne faisait que des deep-copy pour mieux gérer la mémoire*/
 			free(cell_courant->key);
 		}		
 		free(cell_courant);

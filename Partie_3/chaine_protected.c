@@ -4,6 +4,7 @@ CellProtected* create_cell_protected(Protected* pr){
 	CellProtected* nouv = (CellProtected*)malloc(sizeof(CellProtected));
 	if (nouv == NULL){
 		printf("Erreur à l'allocation.");
+		return NULL;
 	}
 	nouv->data = pr;
 	nouv->next = NULL;
@@ -21,6 +22,7 @@ CellProtected* read_protected(){
 	FILE* f = fopen("../Partie_2/declarations.txt","r");
 	if (f==NULL){
 		printf("Erreur d'ouverture du fichier.");
+		return NULL;
 	}
 	CellProtected* liste = NULL;
 	char ligne[256];

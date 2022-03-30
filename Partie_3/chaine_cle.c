@@ -7,6 +7,7 @@ CellKey* create_cell_key(Key* key){
 	CellKey* nouv = (CellKey*)malloc(sizeof(CellKey));
 	if (nouv == NULL){
 		printf("Erreur à l'allocation.");
+		return NULL;
 	}
 	nouv->data = key;
 	nouv->next = NULL;
@@ -23,6 +24,7 @@ CellKey* read_public_keys(char* nom_fichier){
 	FILE* f = fopen(nom_fichier,"r");
 	if (f==NULL){
 		printf("Erreur d'ouverture du fichier.");
+		return NULL;
 	}
 	CellKey* liste = NULL;
 	char ligne[256];

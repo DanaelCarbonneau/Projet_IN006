@@ -1,0 +1,12 @@
+I/ Questions sur la partie 3 :
+
+*On a un problème avec la mémoire, restreint à une combinaison d'utilisation de str_to_protected puis liberer_protected.
+Sinon, toute la mémoire semble être libérée correctement (je me demande donc s'il n'y a pas un problème directement dans
+str_to_protected) + c'est quoi les erreurs de valgrind avec invalid read
+
+II/Questions sur la partie 4 :
+
+*On ne sait pas quelle fonction de hachage utiliser
+
+*Dans create_hash_table, est-il utile de remplir de valeurs nulles la table de hachage au début de la fonction ?
+
