@@ -67,6 +67,7 @@ void delete_hashtable(HashTable* t){
 	for (int i = 0; i < t->size; i++){
 		cell_courant = t->tab[i];
 		if (cell_courant){
+			/*Est-ce qu'on veut free les clés aussi???*/
 			free(cell_courant->key);
 		}		
 		free(cell_courant);
