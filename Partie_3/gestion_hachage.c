@@ -4,12 +4,13 @@
 
 HashCell* create_hashcell(Key* key){
     HashCell* res = (HashCell*) malloc(sizeof(HashCell));
-    if (nouv == NULL){
+    if (res == NULL){
 		printf("Erreur allocation!");
 		return NULL;
 	}
     res->key = key;
     res->val = 0;
+    return res;
 }
 
 int hash_function(Key* key, int size){
@@ -33,7 +34,7 @@ int find_position(HashTable* t, Key* key){ /*A revoir !!!*/
 		Continuer jusqu'à ce qu'on revienne à pos_init.*/
 			pos = 0;
 		}
-	} if ((pos == pos_init-1) && (t->tab[pos]!=NULL){
+	} if ((pos == pos_init-1) && (t->tab[pos]!=NULL)){
 		printf("Table pleine!"); /*D'après la remarque, on ne devrait jamais rencontrer cette situation.*/
 		return -1;
 	}
