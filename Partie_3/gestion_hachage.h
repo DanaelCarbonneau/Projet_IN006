@@ -37,6 +37,9 @@ int find_position(HashTable* t, Key* key);
 /*Fonction permettant de créer une table de hachage de taille donnée et d'y placer les clés de la liste donnée*/
 HashTable* create_hashtable(CellKey* keys, int size);
 
+/*Fonction permettant de libérer toute la mémoire associée à une table de hachage*/
+void delete_hashtable(HashTable* t);
+
 
 
 #endif
