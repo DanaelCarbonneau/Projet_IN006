@@ -4,6 +4,11 @@
 Votant* generation_fichier_votants(int nv){
     FILE* fichier_votant = fopen("keys.txt","w");
 
+    if(fichier_votant==NULL){
+        printf("Erreur à l'ouverture du fichier\n");
+        return NULL;
+    }
+
     /*On créé un tableau de nv couples de clés représentant nos nv votans*/
 
     Votant* tabV = (Votant*) malloc(nv* sizeof(Votant));
@@ -41,7 +46,17 @@ Key** generation_fichier_candidats(int nc, Votant*tabV,int nv){
     int tirage;
     FILE* fichier_candidat = fopen("candidates.txt","w");
 
+    if(fichier_candidat==NULL){
+        printf("Erreur à l'ouverture du fichier\n");
+        return NULL;
+    }
+
     Key** tabC = (Key**) malloc(nc * sizeof(Key*));
+
+    if(tabC==NULL){
+        printf("Erreur à l'allocation");
+        return NULL;
+    }
 
     for(int i = 0 ; i < nc ; i++){
         tirage = rand()%nv;             //On va sur une case aléatoire du tableau
@@ -93,6 +108,12 @@ void generate_random_data(int nv, int nc){
     Key** tabc = generation_fichier_candidats(nc,tabv,nv);
 
     FILE* fichier_votes = fopen("declarations.txt","w");
+
+    if(fichier_votes==NULL){
+        printf("Erreur à l'ouverture du fichier\n");
+        return;
+    }
+    
     char* pts;
     for(int i = 0; i < nv ; i++){
         Protected * vote = emission_vote(tabv[i],tabc,nc);
