@@ -1,5 +1,5 @@
-#ifndef GESTION_HACHAGE
-#define GESTION_HACHAGE
+#ifndef GESTION_HACHAGEH
+#define GESTION_HACHAGEH
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -40,6 +40,14 @@ HashTable* create_hashtable(CellKey* keys, int size);
 /*Fonction permettant de libérer toute la mémoire associée à une table de hachage*/
 void delete_hashtable(HashTable* t);
 
+/*Fonction qui va calculer, selon une table de hachage, qui est le candidat ayant le plus de voix (en cas d'égalité, ce sera le
+premier candidat dans la table*/
+Key* find_winner(HashTable* H_c);
+
+/*Fonction calculant le vainqueur de l'élection étant donnés une liste de déclarations avec des signatures valides (decl),
+une liste de candidats (candidates) et une liste de personnes autorisées à voter (voters)*/
+
+Key* compute_winner(CellProtected* decl, CellKey* candidates, CellKey* voters, int sizeC, int sizeV);
 
 
 #endif

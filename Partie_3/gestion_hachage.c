@@ -76,3 +76,54 @@ void delete_hashtable(HashTable* t){
 	free(t);
 }
 
+Key* find_winner(HashTable* H_c){
+    if(H_c->tab==NULL){
+        printf("Erreur, table de hachage vide !");
+        return NULL;
+    }
+
+    HashCell* gagnant_provisoire = H_c->tab[0];
+    
+    for(int i = 0 ; i < H_c->size ; i++){
+        if( (H_c->tab[i]) && (H_c->tab[i]->val> gagnant_provisoire->val) ){     //Attention, il faut bien vérifier que la case n'est pas nulle !
+            gagnant_provisoire = H_c->tab[i];
+        }
+    }
+    return gagnant_provisoire->key;
+}
+
+
+Key* compute_winner(CellProtected* decl, CellKey* candidates, CellKey* voters, int sizeC, int sizeV){
+
+    /*On commence par créer les deux tables de hachage votants et candidats*/
+    HashTable* H_c = create_hashtable(candidates,sizeC);                    //Table de hachage des candidats
+    HashTable* H_v = create_hashtable(voters,sizeV);                        //Table de hachage de la liste électorale
+
+    /*On parcourt la liste des déclarations pour mettre à jour nos tables de hachages*/
+
+    CellProtected* courant = decl;
+
+    while(courant){
+
+        /*Vérifier que la clé de notre déclaration courante est dans la table de hachage H_v*/
+        int pos_hypo_v = find_position(H_v,courant->data->pKey);//Position hypothétique de la clé de notre courant dans la hash table
+        
+        /*Mise à jour du nombre de votants pour le candidat*/
+        if((H_v->tab[pos_hypo_v])&&(H_v->tab[pos_hypo_v]->val==0)){    //On vérifie que notre votant est dans la table et qu'il n'a pas déjà voté
+
+            Key* candidat_choisi = str_to_key(courant->data->mess);     //On récupère le candidat choisi
+
+            /*On vérifie que ce candidat est bien dans notre liste*/
+            int pos_hypo_c = find_position(H_c,candidat_choisi);    //Position hypothétique du candidat dans la table
+
+            if(H_c->tab[pos_hypo_c]!=NULL){
+                H_c->tab[pos_hypo_c]->val++;            //On ajoute une voix au candidat
+                H_v->tab[pos_hypo_v]=1;                 //Le votant dans la tab a alors déjà voté
+            }
+        }
+        courant = courant->next;                //On a fini de traiter le votant courant, on passe au suivant
+    }
+    /*On peut retourner le gagnat selon notre fonction find_winner*/
+    return find_winner(H_c);
+
+}
