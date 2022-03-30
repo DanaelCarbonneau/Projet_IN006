@@ -39,4 +39,21 @@ int find_position(HashTable* t, Key* key){ /*A revoir !!!*/
 	}
 	return pos;
 }
+	     
+HashTable* create_hashtable(CellKey* keys, int size){
+	HashTable* h_table = (HashTable*)malloc(sizeof(HashTable));
+	h_table->size = size;
+	h_table->tab = (HashCell**)malloc(size*sizeof(HashCell*));
+
+	CellKey* courant = keys;
+	int pos;
+	while (courant){
+		HashCell* cell = create_hashcell(courant->data);
+		pos = find_position(courant->data,size);
+		/*là inclure un test de pos == -1 si besoin...*/
+		h_table->tab[pos] = cell;
+		courant = courant->next;
+	}
+	return h_table;
+}
 
