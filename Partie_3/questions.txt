@@ -1,0 +1,6 @@
+-> Probing linéaire : on va à pos "idéale" selon fonction H. Si déjà quelqu'un de différent, on avance. Si on avance jusqu'à la fin du tab, on reprend au début.
+On renvoie premier emplacement NULL trouvé où emplacement où y est déjà. 
+
+-> création table hachage : besoin d'initialiser tous les ptrs à NULL ? 
+
+-> libération de la table : les clés avec? 
