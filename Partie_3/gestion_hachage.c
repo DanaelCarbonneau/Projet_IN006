@@ -45,6 +45,11 @@ HashTable* create_hashtable(CellKey* keys, int size){
 	h_table->size = size;
 	h_table->tab = (HashCell**)malloc(size*sizeof(HashCell*));
 
+	/*utile???*/
+	for (int i = 0; i < size; i++){
+		h_table->tab[i] = NULL;
+	}
+	
 	CellKey* courant = keys;
 	int pos;
 	while (courant){
@@ -55,5 +60,17 @@ HashTable* create_hashtable(CellKey* keys, int size){
 		courant = courant->next;
 	}
 	return h_table;
+}
+	      
+void delete_hashtable(HashTable* t){
+	HashCell* cell_courant;
+	for (int i = 0; i < t->size; i++){
+		cell_courant = t->tab[i];
+		if (cell_courant){
+			free(cell_courant->key);
+		}		
+		free(cell_courant);
+	} free(t->tab);
+	free(t);
 }
 
