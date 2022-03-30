@@ -28,6 +28,12 @@ HashCell* create_hashcell(Key* key);
 /*Fonction qui retourne la position d'un élément dans la table de hachage*/
 int hash_function(Key* key, int size);
 
+/*Fonction permettant de comparer deux clés*/
+int compare_cles(Key* k1, Key* k2);
+
+/*Fonction permettant de trouver la position où se situe l'élément de clé donnée, ou la position où il aurait du être*/
+int find_position(HashTable* t, Key* key);
+
 
 
 #endif
