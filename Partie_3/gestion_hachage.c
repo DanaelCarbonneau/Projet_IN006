@@ -34,7 +34,7 @@ int find_position(HashTable* t, Key* key){ /*A revoir !!!*/
 			pos = 0;
 		}
 	} if ((pos == pos_init-1) && (t->tab[pos]!=NULL){
-		printf("Table pleine!"); /*Ou alors on gère par chainage une fois que table toute pleine?*/
+		printf("Table pleine!"); /*D'après la remarque, on ne devrait jamais rencontrer cette situation.*/
 		return -1;
 	}
 	return pos;
@@ -50,7 +50,7 @@ HashTable* create_hashtable(CellKey* keys, int size){
 	while (courant){
 		HashCell* cell = create_hashcell(courant->data);
 		pos = find_position(courant->data,size);
-		/*là inclure un test de pos == -1 si besoin...*/
+		/*D'après la remarque on trouve toujours ici une position.*/
 		h_table->tab[pos] = cell;
 		courant = courant->next;
 	}
