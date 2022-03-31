@@ -1,4 +1,5 @@
 
+
 #include"gestion_hachage.h"
 
 
@@ -14,18 +15,18 @@ HashCell* create_hashcell(Key* key){
 }
 
 int hash_function(Key* key, int size){
-	return (key->n + key->val)%size; /*A revoir !!!*/
+	return (key->n + key->val)%size; 
 }
 
 int compare_cles(Key* k1, Key* k2){
 	return (k1->val == k2->val) && (k1->n == k2->n);
 }
 
-int find_position(HashTable* t, Key* key){ /*A revoir !!!*/
+int find_position(HashTable* t, Key* key){ 
 	int pos_init = hash_function(key,t->size);
 	int pos = pos_init;
 	while ( (pos != pos_init-1) && (t->tab[pos] != NULL)){
-		if (compare_cles(t->tab[pos_init],key)){
+		if (compare_cles(t->tab[pos_init]->key,key)){
 			return pos;
 		}else{
 			pos++; /*Gestion par probing linéaire : s'il n'est pas là, essayer le suivant.*/
@@ -53,8 +54,6 @@ HashTable* create_hashtable(CellKey* keys, int size){
 	h_table->size = size;
 	h_table->tab = (HashCell**)malloc(size*sizeof(HashCell*));
 
-	/*E-utile???
-    D- Je pense oui, ça mange pas de pain et on s'assure que les valeurs sont bien nulles, comme on l'utilise après*/
 	for (int i = 0; i < size; i++){
 		h_table->tab[i] = NULL;
 	}
@@ -63,7 +62,7 @@ HashTable* create_hashtable(CellKey* keys, int size){
 	int pos;
 	while (courant){
 		HashCell* cell = create_hashcell(courant->data);
-		pos = find_position(courant->data,size);
+		pos = find_position(h_table,courant->data);
 		/*D'après la remarque on trouve toujours ici une position.*/
 		h_table->tab[pos] = cell;
 		courant = courant->next;
@@ -75,26 +74,27 @@ void delete_hashtable(HashTable* t){
 	HashCell* cell_courant;
 	for (int i = 0; i < t->size; i++){
 		cell_courant = t->tab[i];
-		if (cell_courant){
-			/*E- Est-ce qu'on veut free les clés aussi???     
-             D- Je pense que oui, on a dit qu'on ne faisait que des deep-copy pour mieux gérer la mémoire*/
-			free(cell_courant->key);
-		}		
 		free(cell_courant);
 	} free(t->tab);
 	free(t);
 }
 
 Key* find_winner(HashTable* H_c){
-    if(H_c->tab==NULL){
+    if(H_c && H_c->tab==NULL){
         printf("Erreur, table de hachage vide !");
         return NULL;
     }
 
-    HashCell* gagnant_provisoire = H_c->tab[0];
+    HashCell* gagnant_provisoire;
+	int j = 0;
+	while (H_c->tab[j] == NULL){
+		j++;
+	}
+	gagnant_provisoire = H_c->tab[j];
     
     for(int i = 0 ; i < H_c->size ; i++){
-        if( (H_c->tab[i]) && (H_c->tab[i]->val> gagnant_provisoire->val) ){     //Attention, il faut bien vérifier que la case n'est pas nulle !
+
+        if( (H_c->tab[i]) && (H_c->tab[i]->val > gagnant_provisoire->val) ){     //Attention, il faut bien vérifier que la case n'est pas nulle !
             gagnant_provisoire = H_c->tab[i];
         }
     }
@@ -105,8 +105,8 @@ Key* find_winner(HashTable* H_c){
 Key* compute_winner(CellProtected* decl, CellKey* candidates, CellKey* voters, int sizeC, int sizeV){
 
     /*On commence par créer les deux tables de hachage votants et candidats*/
-    HashTable* H_c = create_hashtable(candidates,sizeC);                    //Table de hachage des candidats
-    HashTable* H_v = create_hashtable(voters,sizeV);                        //Table de hachage de la liste électorale
+    HashTable* H_c = create_hashtable(candidates,sizeC);               //Table de hachage des candidats
+    HashTable* H_v = create_hashtable(voters,sizeV);                        //Table de hachage de la liste électorale 
 
     /*On parcourt la liste des déclarations pour mettre à jour nos tables de hachages*/
 
@@ -116,7 +116,7 @@ Key* compute_winner(CellProtected* decl, CellKey* candidates, CellKey* voters, i
 
         /*Vérifier que la clé de notre déclaration courante est dans la table de hachage H_v*/
         int pos_hypo_v = find_position(H_v,courant->data->pKey);//Position hypothétique de la clé de notre courant dans la hash table
-        
+
         /*Mise à jour du nombre de votants pour le candidat*/
         if((H_v->tab[pos_hypo_v])&&(H_v->tab[pos_hypo_v]->val==0)){    //On vérifie que notre votant est dans la table et qu'il n'a pas déjà voté
 
@@ -126,22 +126,22 @@ Key* compute_winner(CellProtected* decl, CellKey* candidates, CellKey* voters, i
             int pos_hypo_c = find_position(H_c,candidat_choisi);    //Position hypothétique du candidat dans la table
 
             if(H_c->tab[pos_hypo_c]!=NULL){
+			
                 H_c->tab[pos_hypo_c]->val++;            //On ajoute une voix au candidat
-                H_v->tab[pos_hypo_v]=1;                 //Le votant dans la tab a alors déjà voté
+                H_v->tab[pos_hypo_v]->val=1;                 //Le votant dans la tab a alors déjà voté
             }
         }
         courant = courant->next;                //On a fini de traiter le votant courant, on passe au suivant
     }
-	
-   /*On veut retourner le gagnat selon notre fonction find_winner*/
-    Key* res = find_winner(H_c);
-	
-   /*On libère la mémoire*/
-   delete_hashtable(H_c);
-   delete_hashtable(H_v);
+    /*On veut retourner le gagnat selon notre fonction find_winner*/
 
-   /*On retourne le gagnant trouvé*/
-   return res;
+    Key* res = find_winner(H_c);	
 
+	/*On libère la mémoire*/
+	delete_hashtable(H_c);
+	delete_hashtable(H_v);
+
+	/*On retourne le gagnant trouvé*/
+	return res;
 
 }
