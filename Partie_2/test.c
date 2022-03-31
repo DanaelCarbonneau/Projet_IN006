@@ -9,16 +9,6 @@
 #include"../Partie_1/gestion_cryptage.h"
 #include"../Partie_1/tests_primalite.h"
 
-/*==========================ATTENTION==========================
-
-Il reste une problème portant sur la gestion de la mémoire dans ce test : il est très spécifique à la libération
-un protected *qui a été créé avec str_to_protected* (uniquement), il manque systématiquement un free, si ce message 
-est toujours présent lors du rendu de mi-projet, c'est que nous ne l'avons toujours pas résolu, et nous aurons sans 
-doutes besoin d'aide pour comprendre la subtilité derrière cette fuite mémoire. 
-
-Le code des deux fonctions nous posant problème est dans
-ce dossier ("signature.c")
-===============================================================*/
 
 
 int main ( void ) {
@@ -94,9 +84,10 @@ int main ( void ) {
     liberer_protected(pr);
 
     pr = str_to_protected( chaine ) ;
+    liberer_protected(pr);
    
 
-    
+    #if 0
     char * kts = key_to_str ( pr-> pKey );
     char * stk = signature_to_str( pr-> sgn );
     printf ("str_to_protected : %s %s %s \n" , kts ,pr-> mess , stk) ;
@@ -104,6 +95,7 @@ int main ( void ) {
     liberer_protected(pr);
     free(kts);
     free(stk);
+    #endif
     free(chaine);
 
 
@@ -113,9 +105,9 @@ int main ( void ) {
     free ( sKeyC ) ;
 
     printf("\n\n\n~~~~~~~~~~~~~~~\nEssais sur la gestion de candidats\n");
-
+#if 0
     generate_random_data(1000,10);
-
+#endif 
 
     return 0;
 

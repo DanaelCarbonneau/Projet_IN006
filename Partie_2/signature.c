@@ -103,8 +103,7 @@ char* protected_to_str(Protected* protected){
 }
 
 Protected* str_to_protected(char* chaine){
-	/*On alloue le résultat*/
-	Protected* res =(Protected*) malloc(sizeof(Protected));
+	/*On alloue le résultat*/	
 
 	char cleS[256];
 	char message[256];
