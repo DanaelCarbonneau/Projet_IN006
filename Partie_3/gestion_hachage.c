@@ -132,7 +132,16 @@ Key* compute_winner(CellProtected* decl, CellKey* candidates, CellKey* voters, i
         }
         courant = courant->next;                //On a fini de traiter le votant courant, on passe au suivant
     }
-    /*On peut retourner le gagnat selon notre fonction find_winner*/
-    return find_winner(H_c);
+	
+   /*On veut retourner le gagnat selon notre fonction find_winner*/
+    Key* res = find_winner(H_c);
+	
+   /*On libère la mémoire*/
+   delete_hashtable(H_c);
+   delete_hashtable(H_v);
+
+   /*On retourne le gagnant trouvé*/
+   return res;
+
 
 }
