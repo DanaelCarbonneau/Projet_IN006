@@ -36,7 +36,7 @@ CellKey* read_public_keys(char* nom_fichier){
 			liste = ajoutEnTete(nouv, liste);
 		}
 		else{
-			printf("Erreur de formatage!");
+			printf("Erreur de formatage!\n");
 		}
 	}
 	fclose(f);
