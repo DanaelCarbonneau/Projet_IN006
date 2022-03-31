@@ -10,3 +10,8 @@ II/Questions sur la partie 4 :
 
 *Dans create_hash_table, est-il utile de remplir de valeurs nulles la table de hachage au début de la fonction ?
 
+-> Probing linéaire : on va à pos "idéale" selon fonction H. Si déjà quelqu'un de différent, on avance. Si on avance jusqu'à la fin du tab, on reprend au début.
+On renvoie premier emplacement NULL trouvé où emplacement où y est déjà. 
+
+-> libération de la table : les clés avec? 
+
