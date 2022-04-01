@@ -61,7 +61,6 @@ char* decrypt(long* crypted, int size, long u, long n){
         cour = crypted[i];
         decoded[i] = (char) modpow(cour,u,n); //formule donnée dans l'énoncé
     }
-    printf("\n");
 
     //On met le caractère d'arret
     decoded[size] = '\0';
