@@ -18,7 +18,7 @@ Votant* generation_fichier_votants(int nv){
         tabV[i].pKey = (Key*) malloc(sizeof(Key));
         tabV[i].sKey = (Key*) malloc(sizeof(Key));
         tabV[i].est_candidat = 0;
-        init_pair_keys(tabV[i].pKey,tabV[i].sKey,3,7);
+        init_pair_keys(tabV[i].pKey,tabV[i].sKey,10,12);                //On a augmenté la taille des clés afin d'éviter les doublons (plus de valeurs possibles) !
 
         char * ktsp = key_to_str(tabV[i].pKey);                         //Permet de gérer les fuites mémoires
         char * kt2s = key_to_str(tabV[i].sKey);
