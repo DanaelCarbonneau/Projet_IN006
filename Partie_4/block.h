@@ -26,11 +26,15 @@ unsigned char* hash_function_SHA256(const char* s);
 char* block_to_str(Block* B);
 
 /*Fonction qui vérifie qu'il y a d 0 successifs au début de la valeur hachée passée en paramètre*/
-
 int verifie_nb_d(unsigned char* hash,int d);
 
 /*Fonction qui incrémente l'attribut nonce de B jusqu'à ce que la valeur hashée commence par d 0 successifs*/
 void compute_proof_of_work(Block *B, int d);
 
+/*Fonction qui vérifie qu'un block est valide, c'est à dire ???*/
+int verify_block(Block* b, int d);
+
+/*Fonction qui permet de générer un fichier donnant pour chaque d entre 0 et nb_max_d le temps nécessaire pour obtenir une valeur hachée avec d 0*/
+void generate_fichier_comparaison(Block* b,int nb_d_max);
 
 #endif
