@@ -148,7 +148,12 @@ unsigned char* hash_function_SHA256(const char* s){
 }
 
 int verifie_nb_d(unsigned char* hash,int d){
-
+    /*hash est représentée en binaire => on demande à ce que commence par quatre 0*/
+    if (strlen(hash) < 4){
+        return 0;
+    } else{
+        return (hash[0]=='0' and hash[1]=='0' and hash[2]=='0' and hash[3]=='0');
+    }
 }
 
 void compute_proof_of_work(Block *B, int d){
@@ -165,5 +170,28 @@ void compute_proof_of_work(Block *B, int d){
         verif_d = verifie_nb_d(B->hash,d);
     }
     
+}
+
+int verify_block(Block* b, int d){
+    
+}
+
+void generate_fichier_comparaison(Block* b,int nb_d_max){
+    FILE* fichier = fopen("comparaison_d.txt","w");
+    /*Variables pour le temps*/
+	clock_t temps_initial;
+	clock_t temps_final;
+	double temps;
+    srand(time(NULL));
+    
+    for (int i = 0; i<nb_d_max; i++){
+        temps_initial = clock();
+        compute_proof_of_work(b,i);
+        temps_final = clock();
+        temps = ((double)(temps_final - temps_initial)) / (CLOCKS_PER_SEC));
+        fprintf(fichier,"%d\t%.10f\n,i,temps);        
+    }
+    
+    fclose(fichier);
 }
 
