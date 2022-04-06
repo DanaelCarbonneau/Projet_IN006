@@ -16,7 +16,8 @@ void write_block(char* nom_fichier, Block* b){
     char* cle = key_to_str(b->author);
     char* hash = b->hash;
     char* previous = b->previous_hash;
-    fprintf(fichier_blocks,"%s\t%s \t%s\n",cle,hash,previous);
+    int nonce = b->nonce;
+    fprintf(fichier_blocks,"%s\t%s\t%s\td\n",cle,hash,previous,nonce);
     CellProtected* courant = b->votes;
     char* prtctd_cour;
     while(courant){
@@ -50,10 +51,11 @@ Block* read_block(char*nom_fichier){
     char cle[256];
     char* hash;
     char*previous;
+    int nonce;
     char buffer[256];
     fgets(buffer,256,fichier_lecture);
 
-    if(sscanf(buffer,"%s\t%s\t%s\n",cle,hash,previous)!=3){
+    if(sscanf(buffer,"%s\t%s\t%s\t%d\n",cle,hash,previous,&nonce)!=4){
         printf("Erreur de formatage dans le fichier (infos avant la chaine) !\n");
         free(res);
         return NULL;
@@ -62,14 +64,13 @@ Block* read_block(char*nom_fichier){
     res->author = key_to_str(cle);
     res->hash = hash;
     res->previous_hash = previous;
+    res->nonce = nonce;
     res->votes = NULL;
 
     /*On va lire lignes par lignes les protected pour les ajouter dans la liste votes*/
-
     fgets(buffer,256,fichier_lecture);
-
     Protected* pr;
-    while (buffer != "~"){      //On place ce caractère à la fin des protected rentrés dans le fichier
+    while (strcmp(buffer,"~")!=0){      //On place ce caractère à la fin des protected rentrés dans le fichier
 
         pr = str_to_protected(buffer);          /*Si on a un fichier qui n'a pas le tilde à la fin, au moment où
                                                 La première ligne lue qui ne respecte pas le format d'un protected
@@ -88,14 +89,62 @@ Block* read_block(char*nom_fichier){
     return res;
 }
 
+char* block_to_str(Block* B){
+    /*On veut d'abord calculer la taille exacte à allouer (couteux mais une seule fois X realloc nombreux ?)*/
+    /*On connait la taille des char* immédiatement grace à strlen*/
+    char* cle = key_to_str(B->author);
+    unsigned char* previous = B->previous_hash;
+    int taille_tot = strlen(cle)+strlen(previous);
+    
+    /*On doit parcourir notre liste de protected pour additionner leur taille en char**/
+    CellProtected* courant = B->votes;
+    char* pr_char;
+    int nb_votes = 0;
+    while (courant){
+        pr_char = protected_to_str(courant->data);
+        taille_tot += strlen(pr_char);
+        free(pr_char);
+        courant = courant->next;
+        nb_votes++;
+    }
+    
+    /*On connaitre la taille de nonce en char**/
+    char* nonce_char = itoa(B->nonce);
+    taille_tot += strlen(nonce_char);
+    
+    /*On rajoute 1 pour le \0, et 2+nb_votes espaces*/
+    taille_tot+= (3+nb_votes);
+    
+    /*On peut enfin allouer la chaine*/
+    char* res = (char*)(malloc(sizeof(char)*taille_tot));
+   
+    /*On la remplit*/
+    strcpy(res, cle);
+    strcat(res," ");
+    strcat(res, previous);
+    strcat(res," ");
+    courant = B->votes;
+    while (courant){
+        pr_char = protected_to_str(courant->data);
+        strcat(res,pr_char);
+        free(pr_char);
+        strcat(res," ");
+        courant = courant->next;
+    }
+    strcat(res,nonce_char);
+    
+    /*On libère ce qui reste de mémoire allouée*/
+    free(cle);
+    free(nonce_char);
+    
+    /*On retourne notre chaine*/
+    return res;
+    
+}
 
 unsigned char* hash_function_SHA256(const char* s){
     unsigned char* hash = SHA256(s,strlen(s),0);
     return hash;
-}
-
-char* block_to_str(Block* B){
-
 }
 
 int verifie_nb_d(unsigned char* hash,int d){
@@ -111,9 +160,10 @@ void compute_proof_of_work(Block *B, int d){
     int verif_d = verifie_nb_d(B->hash,d);
 
     while (verif_d = 0){
-        B->hash = hash_function_SHA256(s);
         B->nonce ++;
+        B->hash = hash_function_SHA256(s);
         verif_d = verifie_nb_d(B->hash,d);
     }
     
 }
+
