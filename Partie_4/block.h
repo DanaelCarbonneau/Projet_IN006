@@ -4,6 +4,7 @@
 #include<stdio.h>
 #include<string.h>
 #include"../Partie_3/chaine_protected.h"
+#include<time.h>
 
 typedef struct block {
     Key * author ;

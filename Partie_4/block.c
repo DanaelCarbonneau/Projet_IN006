@@ -1,10 +1,6 @@
 #include"block.h"
 
 
-
-
-
-
 void write_block(char* nom_fichier, Block* b){
     FILE* fichier_blocks = fopen(nom_fichier,'w');
 
@@ -148,32 +144,55 @@ unsigned char* hash_function_SHA256(const char* s){
 }
 
 int verifie_nb_d(unsigned char* hash,int d){
-    /*hash est représentée en binaire => on demande à ce que commence par quatre 0*/
+    /*hash est représentée en binaire => on demande à ce que commence par quatre 0*/        //D : pour moi là ça marche pas parce qu'on regarde juste les 4 premiers et pas les 4d premiers
     if (strlen(hash) < 4){
         return 0;
     } else{
-        return (hash[0]=='0' and hash[1]=='0' and hash[2]=='0' and hash[3]=='0');
+        return (hash[0]=='0' & hash[1]=='0' & hash[2]=='0' & hash[3]=='0');
     }
 }
+
+#if 0
+
+Autre proposition
+
+int verifie_nb_d(unsigned char *hash, int d) {
+    for (int i = 0; i < d/2; i++) {
+        if (hash[i] != 0) {
+            return 0;
+        }
+    }
+    if ((d % 2) == 1 && hash[d/2] & 0b11110000 != 0) {
+        return 0;
+    }
+    return 1;
+}
+#endif
+
+
 
 void compute_proof_of_work(Block *B, int d){
     B->nonce = 0;
 
-    char* s = block_to_str(B);
-    B->hash = hash_function_SHA256(s);
-
-    int verif_d = verifie_nb_d(B->hash,d);
-
-    while (verif_d = 0){
-        B->nonce ++;
+    int verif_d = 0;
+    char* s;
+    do {
+        s = block_to_str(B);
         B->hash = hash_function_SHA256(s);
+        B->nonce ++;
         verif_d = verifie_nb_d(B->hash,d);
-    }
-    
-}
+        free(s);
+    } while (!verif_d);
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
-int verify_block(Block* b, int d){
-    
+int verify_block(Block* B, int d) {
+    char* s = block_to_str(B);
+    int res = 0;
+    if (verifie_nb_d(B->hash, d) && strcmp(B->hash, hash_function_SHA256(s)) == 0) {
+        res = 1;
+    }
+    free(s);
+    return res; 
 }
 
 void generate_fichier_comparaison(Block* b,int nb_d_max){
