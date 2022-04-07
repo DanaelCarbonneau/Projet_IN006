@@ -144,11 +144,18 @@ unsigned char* hash_function_SHA256(const char* s){
 }
 
 int verifie_nb_d(unsigned char* hash,int d){
-    /*hash est représentée en binaire => on demande à ce que commence par quatre 0*/        //D : pour moi là ça marche pas parce qu'on regarde juste les 4 premiers et pas les 4d premiers
-    if (strlen(hash) < 4){
+    /*hash est représentée en binaire => on demande à ce que commence par quatre d 0*/        //D : pour moi là ça marche pas parce qu'on regarde juste les 4 premiers et pas les 4d premiers
+    //E: j'ai essayé de corriger du coup!
+	
+    if (strlen(hash) < 4*d){
         return 0;
     } else{
-        return (hash[0]=='0' & hash[1]=='0' & hash[2]=='0' & hash[3]=='0');
+        for (int i = 0; i < 4*d ; i++){
+		if (hash[i] != 0){
+			return 0;
+		}
+	}
+	return 1;
     }
 }
 
