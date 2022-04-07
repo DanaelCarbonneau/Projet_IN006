@@ -7,7 +7,7 @@
 
 #define D_MAX 10
 
-int main{
+int main(){
   /*Creer le bloc*/
   Block* b = (Block*)malloc(sizeof(Block));
   Key* key_author = (Key*)malloc(sizeof(Key));
