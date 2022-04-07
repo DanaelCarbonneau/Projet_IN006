@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "block.h"
-#include "../Partie_1/gestion_clef.h"
+#include "../Partie_2/gestion_clef.h"
 #include"../Partie_3/chaine_protected.h"
 
 #define D_MAX 10
