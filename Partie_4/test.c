@@ -18,5 +18,10 @@ int main{
     
   /*Comparer le temps mis pour lui donner une proof of work de 0 à D_MAX*/
   generate_fichier_comparaison(b,D_MAX);
+  
+  /*Libération mémoire*/
+  free(b->author);
+  delete_list_protected(b->votes);
+  free(b);
 }
 
