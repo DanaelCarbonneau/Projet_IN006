@@ -31,5 +31,5 @@ tests_primalite.o : ../Partie_1/tests_primalite.c ../Partie_1/tests_primalite.h
 	gcc -c ../Partie_1/tests_primalite.c 
 	
 
-
-clean : rm *.o test_SHA256
+clean:
+	rm -f *.o test test_SHA256
