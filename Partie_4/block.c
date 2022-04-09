@@ -2,7 +2,7 @@
 
 
 void write_block(char* nom_fichier, Block* b){
-    FILE* fichier_blocks = fopen(nom_fichier,'w');
+    FILE* fichier_blocks = fopen(nom_fichier,"w");
 
     if(fichier_blocks==NULL){
         printf("Erreur à l'ouverture du fichier !\n");
@@ -13,7 +13,7 @@ void write_block(char* nom_fichier, Block* b){
     char* hash = b->hash;
     char* previous = b->previous_hash;
     int nonce = b->nonce;
-    fprintf(fichier_blocks,"%s\t%s\t%s\td\n",cle,hash,previous,nonce);
+    fprintf(fichier_blocks,"%s\t%s\t%s\t%d\n",cle,hash,previous,nonce);
     CellProtected* courant = b->votes;
     char* prtctd_cour;
     while(courant){
@@ -28,7 +28,7 @@ void write_block(char* nom_fichier, Block* b){
 
 Block* read_block(char*nom_fichier){
     /*On ouvre le fichier*/
-    FILE* fichier_lecture = fopen(nom_fichier,'r');
+    FILE* fichier_lecture = fopen(nom_fichier,"r");
 
     if(fichier_lecture == NULL){
         printf("Erreur d'ouverture du fichier !\n");
@@ -57,7 +57,7 @@ Block* read_block(char*nom_fichier){
         return NULL;
     }
 
-    res->author = key_to_str(cle);
+    res->author = str_to_key(cle);
     res->hash = hash;
     res->previous_hash = previous;
     res->nonce = nonce;
@@ -104,8 +104,9 @@ char* block_to_str(Block* B){
         nb_votes++;
     }
     
-    /*On connaitre la taille de nonce en char**/
-    char* nonce_char = itoa(B->nonce);
+    /*On doit connaitre la taille de nonce en char*/
+    char nonce_char[256];
+    sprintf(nonce_char,"%d",B->nonce);              //Apparement itoa n'existe pas mais on peut faire un sprintf
     taille_tot += strlen(nonce_char);
     
     /*On rajoute 1 pour le \0, et 2+nb_votes espaces*/
@@ -131,7 +132,6 @@ char* block_to_str(Block* B){
     
     /*On libère ce qui reste de mémoire allouée*/
     free(cle);
-    free(nonce_char);
     
     /*On retourne notre chaine*/
     return res;
@@ -143,6 +143,7 @@ unsigned char* hash_function_SHA256(const char* s){
     return hash;
 }
 
+#if 0
 int verifie_nb_d(unsigned char* hash,int d){
     /*hash est représentée en binaire => on demande à ce que commence par quatre d 0*/        //D : pour moi là ça marche pas parce qu'on regarde juste les 4 premiers et pas les 4d premiers
     //E: j'ai essayé de corriger du coup!
@@ -158,12 +159,14 @@ int verifie_nb_d(unsigned char* hash,int d){
 	return 1;
     }
 }
+#endif
 
-#if 0
-
-Autre proposition
 
 int verifie_nb_d(unsigned char *hash, int d) {
+    if(strlen(hash)<d/2){
+        return 0;
+    }
+
     for (int i = 0; i < d/2; i++) {
         if (hash[i] != 0) {
             return 0;
@@ -174,7 +177,7 @@ int verifie_nb_d(unsigned char *hash, int d) {
     }
     return 1;
 }
-#endif
+
 
 
 
@@ -214,8 +217,8 @@ void generate_fichier_comparaison(Block* b,int nb_d_max){
         temps_initial = clock();
         compute_proof_of_work(b,i);
         temps_final = clock();
-        temps = ((double)(temps_final - temps_initial)) / (CLOCKS_PER_SEC));
-        fprintf(fichier,"%d\t%.10f\n,i,temps);        
+        temps = ((double) (temps_final - temps_initial) / (CLOCKS_PER_SEC) );
+        fprintf(fichier,"%d\t%.10f\n",i,temps);        
     }
     
     fclose(fichier);
