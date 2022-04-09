@@ -10,10 +10,11 @@ void write_block(char* nom_fichier, Block* b){
     }
 
     char* cle = key_to_str(b->author);
-    char* hash = b->hash;
-    char* previous = b->previous_hash;
+    unsigned char* hash = b->hash;
+    unsigned char* previous = b->previous_hash;
     int nonce = b->nonce;
-    fprintf(fichier_blocks,"%s\t%s\t%s\t%d\n",cle,hash,previous,nonce);
+
+    fprintf(fichier_blocks,"%s\t%d\t%d\t%d\n",cle,hash,previous,nonce);
     CellProtected* courant = b->votes;
     char* prtctd_cour;
     while(courant){
@@ -24,6 +25,7 @@ void write_block(char* nom_fichier, Block* b){
     }
     fprintf(fichier_blocks,"~");      ///Le tilde permet de savoir qu'on a fini de lire le block
     free(cle);
+    fclose(fichier_blocks);
 }
 
 Block* read_block(char*nom_fichier){
@@ -45,13 +47,13 @@ Block* read_block(char*nom_fichier){
 
     /*On déclare les variables de notre block et on les remplit à partir du fichier*/
     char cle[256];
-    char* hash;
-    char*previous;
+    unsigned char* hash;
+    unsigned char* previous;
     int nonce;
     char buffer[256];
     fgets(buffer,256,fichier_lecture);
 
-    if(sscanf(buffer,"%s\t%s\t%s\t%d\n",cle,hash,previous,&nonce)!=4){
+    if(sscanf(buffer,"%s\t%d\t%d\t%d\n",cle,hash,previous,&nonce)!=4){
         printf("Erreur de formatage dans le fichier (infos avant la chaine) !\n");
         free(res);
         return NULL;
@@ -84,6 +86,7 @@ Block* read_block(char*nom_fichier){
     fclose(fichier_lecture);
     return res;
 }
+
 
 char* block_to_str(Block* B){
     /*On veut d'abord calculer la taille exacte à allouer (couteux mais une seule fois X realloc nombreux ?)*/
