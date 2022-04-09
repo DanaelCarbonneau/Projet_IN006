@@ -1,0 +1,4 @@
+set terminal postscript portrait 
+set output "courbe_comparaison_d.ps"
+set size 1.5, 0.7
+plot "comparaison_d.txt" using 1:2 title "compute_proof_of_work" with lines
