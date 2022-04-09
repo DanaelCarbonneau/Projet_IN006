@@ -105,9 +105,9 @@ int main ( void ) {
     free ( sKeyC ) ;
 
     printf("\n\n\n~~~~~~~~~~~~~~~\nEssais sur la gestion de candidats\n");
-#if 0
-    generate_random_data(1000,10);
-#endif 
+
+    generate_random_data(100,5);
+
 
     return 0;
 

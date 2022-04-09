@@ -14,7 +14,21 @@ void write_block(char* nom_fichier, Block* b){
     unsigned char* previous = b->previous_hash;
     int nonce = b->nonce;
 
-    fprintf(fichier_blocks,"%s\t%d\t%d\t%d\n",cle,hash,previous,nonce);
+    #if 0
+    fprintf(fichier_blocks,"%s\t%s\t%s\t%d\n",cle,hash,previous,nonce);
+    #endif
+
+    fprintf(fichier_blocks,"%s\n",cle);
+
+    for(int i = 0; i < SHA256_DIGEST_LENGTH ; i++){
+        fprintf(fichier_blocks,"%02x ",hash[i]);
+    }
+    fprintf(fichier_blocks,"\n");
+    for(int i = 0; i < SHA256_DIGEST_LENGTH ; i++){
+        fprintf(fichier_blocks,"%02x ",previous[i]);
+    }
+    fprintf(fichier_blocks,"\n%d\n",nonce);
+
     CellProtected* courant = b->votes;
     char* prtctd_cour;
     while(courant){
@@ -31,11 +45,13 @@ void write_block(char* nom_fichier, Block* b){
 Block* read_block(char*nom_fichier){
     /*On ouvre le fichier*/
     FILE* fichier_lecture = fopen(nom_fichier,"r");
+    
 
     if(fichier_lecture == NULL){
         printf("Erreur d'ouverture du fichier !\n");
         return NULL;
     }
+  
 
     /*On alloue le block résultat*/
     Block* res = (Block*) malloc(sizeof(Block));
@@ -45,16 +61,70 @@ Block* read_block(char*nom_fichier){
         return NULL;
     }
 
+ 
+
     /*On déclare les variables de notre block et on les remplit à partir du fichier*/
     char cle[256];
-    unsigned char* hash;
-    unsigned char* previous;
+    unsigned char hash[256];
+    unsigned char previous[256];
     int nonce;
     char buffer[256];
     fgets(buffer,256,fichier_lecture);
 
-    if(sscanf(buffer,"%s\t%d\t%d\t%d\n",cle,hash,previous,&nonce)!=4){
+    #if 0
+    if(sscanf(buffer,"%s\t%s\t%s\t%d\n",cle,hash,previous,&nonce)!=4){
         printf("Erreur de formatage dans le fichier (infos avant la chaine) !\n");
+        free(res);
+        return NULL;
+    }
+    #endif
+
+    if(sscanf(buffer,"%s",cle)!=1){
+        printf("Erreur de lecture de la clé\n");
+        free(res);
+        return NULL;
+    }
+
+    fgets(buffer,256,fichier_lecture);
+    int j = 0;
+    char buffer_l[4];
+    unsigned int stock;
+    for(int i = 0 ; i < 3*SHA256_DIGEST_LENGTH ; i = i + 3){
+        buffer_l[0] = buffer[i];
+        buffer_l[1] = buffer[i+1];
+        buffer_l[2] = buffer[i+2];
+
+        if(sscanf(buffer_l,"%02x",&stock)!=1){
+            printf("Erreur de formatage du hachage hexadécimal\n");
+            free(res);
+            return NULL;
+        }
+        hash[j] = stock;      
+        j++;
+        
+
+    }
+
+    fgets(buffer,256,fichier_lecture);
+    j = 0;
+    for(int i = 0 ; i < 3*SHA256_DIGEST_LENGTH ; i = i + 3){
+        buffer_l[0] = buffer[i];
+        buffer_l[1] = buffer[i+1];
+        buffer_l[2] = buffer[i+2];
+
+        if(sscanf(buffer_l,"%02x",&stock)!=1){
+            printf("Erreur de formatage du hachage hexadécimal\n");
+            free(res);
+            return NULL;
+        }
+        previous[j] = stock;
+        j++;
+    
+    }
+
+    fgets(buffer,256,fichier_lecture);
+    if(sscanf(buffer,"%d",&nonce)!=1){
+        printf("Erreur dans le scan de la preuve de travail \n");
         free(res);
         return NULL;
     }
@@ -62,11 +132,13 @@ Block* read_block(char*nom_fichier){
     res->author = str_to_key(cle);
     res->hash = hash;
     res->previous_hash = previous;
+
     res->nonce = nonce;
     res->votes = NULL;
 
     /*On va lire lignes par lignes les protected pour les ajouter dans la liste votes*/
     fgets(buffer,256,fichier_lecture);
+    
     Protected* pr;
     while (strcmp(buffer,"~")!=0){      //On place ce caractère à la fin des protected rentrés dans le fichier
 
@@ -74,7 +146,7 @@ Block* read_block(char*nom_fichier){
                                                 La première ligne lue qui ne respecte pas le format d'un protected
                                                 nous fera sortir de la boucle, donc pas de problème de terminaison*/
         if (pr == NULL){
-            printf("Les lignes suivantes ne seront pas prises en compte");
+            printf("Les lignes suivantes ne seront pas prises en compte\n");
             return res;
         }
         res->votes = ajoutEnTete_protected(pr,res->votes);          //On ajoute notre protected
@@ -87,6 +159,22 @@ Block* read_block(char*nom_fichier){
     return res;
 }
 
+
+char * hash_to_str(unsigned char* hash){
+    int taille_chaine = 3*SHA256_DIGEST_LENGTH +1;     //Un espace et deux caractères par unsigned char du tableau hash, et le caractère de fin
+    char * res = malloc((taille_chaine)*sizeof(char));
+    char buffer[4];
+    int j = 0;
+    for(int i = 0 ; i < SHA256_DIGEST_LENGTH ; i ++){
+        sprintf(buffer,"%02x ",hash[i]);        //3 caratères et le caractère de fin
+        res[j]= buffer[0];
+        res[j+1] = buffer[1];
+        res[j+2] = buffer[2];
+        j = j +3;
+    }
+    res[taille_chaine-1] = '\0';
+    return res;
+}
 
 char* block_to_str(Block* B){
     /*On veut d'abord calculer la taille exacte à allouer (couteux mais une seule fois X realloc nombreux ?)*/
@@ -170,25 +258,15 @@ int verifie_nb_d(unsigned char* hash,int d){
 
 
 int verifie_nb_d(unsigned char *hash, int d) {
-    
-
     for (int i = 0; i < d/2; i++) {
         if (hash[i] != 0) {
             return 0;
         }
     }
-    
-  
-
-    
     if ( ((d % 2) == 1) &&  ( (hash[(d/2)] & 0b11110000) != 0b00000000)) {      //Si notre d est impair, on doit regarder une case de plus, mais seulement le premier des deux chiffres de la représentation en hexadécimal
         return 0;
     }
-    
-    for ( int i = 0; i < SHA256_DIGEST_LENGTH ; i ++){
-        printf ( "%02x " , hash[ i ]) ;        
-    }
-    printf("\n");
+
     return 1;
 }
 

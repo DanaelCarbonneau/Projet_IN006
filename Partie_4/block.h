@@ -20,6 +20,10 @@ void write_block(char* nom_fichier,Block*b);
 /*Fonction permettant de lire un block dans un fichier*/
 Block* read_block(char*nom_fichier);
 
+/*Fonction permettant d'obtenir une chaîne de caractères au bon format (hexadécimal) pour nos valeurs de hachage*/
+
+char* hash_to_str(unsigned char * hash);
+
 /*Fonction retournant la valeur hashée correspondant à la chaîne s selon le protocole SHA256*/
 unsigned char* hash_function_SHA256(const char* s);
 
