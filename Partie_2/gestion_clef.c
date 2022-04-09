@@ -73,7 +73,7 @@ Key* str_to_key(char* str){
     }
 
     /*On alloue la clé et on intialise ses valeurs*/
-    Key* cle_res =(Key*) malloc(sizeof(cle_res));
+    Key* cle_res =(Key*) malloc(sizeof(Key));
     init_key(cle_res,val,n);
 
     return cle_res;
