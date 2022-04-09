@@ -5,13 +5,8 @@
 #include "../Partie_2/gestion_clef.h"
 #include"../Partie_3/chaine_protected.h"
 
-#define D_MAX 2
+#define D_MAX 4
 
-/*ATTENTION
-Il reste un problème turbo chelou : les valeurs previous_hash ne se conservent pas quand on sort de read block
-(pourtant il fait le tableau correctement, la même fonction hash_to_str utilisée dans la fonction read_block marche...)
-
-*/
 
 int main(){
   /*Creer le bloc*/
@@ -45,7 +40,9 @@ int main(){
     free(s_prev);
     //print_list_protected(b_bis->votes);
   }
+
   free(b_bis->author);
+  free(skey_author);
   delete_list_protected(b_bis->votes);
   free(b_bis);
   

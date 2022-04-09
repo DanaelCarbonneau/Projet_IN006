@@ -21,8 +21,11 @@ void write_block(char* nom_fichier,Block*b);
 Block* read_block(char*nom_fichier);
 
 /*Fonction permettant d'obtenir une chaîne de caractères au bon format (hexadécimal) pour nos valeurs de hachage*/
-
 char* hash_to_str(unsigned char * hash);
+
+/*Fonction permettant de transformer une chaîne de caractères contenant la valeur de hachage au format hexadécimal
+en une valeur de hachage dans un tableau de unsigned char*/
+unsigned char * str_to_hash(char* st);
 
 /*Fonction retournant la valeur hashée correspondant à la chaîne s selon le protocole SHA256*/
 unsigned char* hash_function_SHA256(const char* s);

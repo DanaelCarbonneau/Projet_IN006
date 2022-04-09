@@ -20,6 +20,18 @@ void write_block(char* nom_fichier, Block* b){
 
     fprintf(fichier_blocks,"%s\n",cle);
 
+    char * s_hash = hash_to_str(hash);
+    char * s_prev = hash_to_str(previous);
+
+    fprintf(fichier_blocks,"%s\n%s\n%d\n",s_hash,s_prev,nonce);
+
+    free(s_hash);
+    free(s_prev);
+
+    #if 0
+
+    La solution au dessus utilise la fonction hash_to_str, ça semble plus élégant
+
     for(int i = 0; i < SHA256_DIGEST_LENGTH ; i++){
         fprintf(fichier_blocks,"%02x ",hash[i]);
     }
@@ -28,6 +40,7 @@ void write_block(char* nom_fichier, Block* b){
         fprintf(fichier_blocks,"%02x ",previous[i]);
     }
     fprintf(fichier_blocks,"\n%d\n",nonce);
+    #endif
 
     CellProtected* courant = b->votes;
     char* prtctd_cour;
@@ -65,8 +78,8 @@ Block* read_block(char*nom_fichier){
 
     /*On déclare les variables de notre block et on les remplit à partir du fichier*/
     char cle[256];
-    unsigned char hash[256];
-    unsigned char previous[256];
+    unsigned char* hash;
+    unsigned char* previous;
     int nonce;
     char buffer[256];
     fgets(buffer,256,fichier_lecture);
@@ -85,10 +98,32 @@ Block* read_block(char*nom_fichier){
         return NULL;
     }
 
-    fgets(buffer,256,fichier_lecture);
+    char l_hash[256];
+    char l_prev[256];
+
+    fgets(l_hash,256,fichier_lecture);
+    fgets(l_prev,256,fichier_lecture);
+
+    hash = str_to_hash(l_hash);
+    
+    previous = str_to_hash(l_prev);
+
+    if(hash == NULL || previous == NULL){
+        printf("Erreur dans la lecture des valeurs de hachage !\n");
+        free(res);
+        free(previous);
+        free(hash);
+        return NULL;
+    }
+
+    #if 0
+
+    Pareil, version du dessus plus élégante
+
     int j = 0;
     char buffer_l[4];
     unsigned int stock;
+
     for(int i = 0 ; i < 3*SHA256_DIGEST_LENGTH ; i = i + 3){
         buffer_l[0] = buffer[i];
         buffer_l[1] = buffer[i+1];
@@ -121,6 +156,8 @@ Block* read_block(char*nom_fichier){
         j++;
     
     }
+
+    #endif
 
     fgets(buffer,256,fichier_lecture);
     if(sscanf(buffer,"%d",&nonce)!=1){
@@ -173,6 +210,27 @@ char * hash_to_str(unsigned char* hash){
         j = j +3;
     }
     res[taille_chaine-1] = '\0';
+    return res;
+}
+
+unsigned char * str_to_hash(char * st){
+    unsigned char * res = (unsigned char *) malloc(SHA256_DIGEST_LENGTH*sizeof(unsigned char));
+    char buffer_l[4];
+    unsigned int stock;
+    int j = 0;
+    for(int i = 0 ; i < 3*SHA256_DIGEST_LENGTH ; i = i + 3){
+        buffer_l[0] = st[i];
+        buffer_l[1] = st[i+1];
+        buffer_l[2] = st[i+2];
+
+        if(sscanf(buffer_l,"%02x",&stock)!=1){
+            printf("Erreur de formatage du hachage hexadécimal\n");
+            free(res);
+            return NULL;
+        }
+        res[j] = stock;
+        j++;
+    }
     return res;
 }
 
