@@ -90,9 +90,13 @@ char* block_to_str(Block* B){
     /*On connait la taille des char* immédiatement grace à strlen*/
     char* cle = key_to_str(B->author);
     unsigned char* previous = B->previous_hash;
+    
     int taille_tot = strlen(cle)+strlen(previous);
+
+
     
     /*On doit parcourir notre liste de protected pour additionner leur taille en char**/
+
     CellProtected* courant = B->votes;
     char* pr_char;
     int nb_votes = 0;
@@ -148,10 +152,10 @@ int verifie_nb_d(unsigned char* hash,int d){
     /*hash est représentée en binaire => on demande à ce que commence par quatre d 0*/        //D : pour moi là ça marche pas parce qu'on regarde juste les 4 premiers et pas les 4d premiers
     //E: j'ai essayé de corriger du coup!
 	
-    if (strlen(hash) < 4*d){
+    if (strlen(hash) < 4*d){        //Condition inutile : hash est de taille constante
         return 0;
     } else{
-        for (int i = 0; i < 4*d ; i++){
+        for (int i = 0; i < 4*d ; i++){     //Trop de cases regardées
 		if (hash[i] != 0){
 			return 0;
 		}
@@ -163,18 +167,25 @@ int verifie_nb_d(unsigned char* hash,int d){
 
 
 int verifie_nb_d(unsigned char *hash, int d) {
-    if(strlen(hash)<d/2){
-        return 0;
-    }
+    
 
     for (int i = 0; i < d/2; i++) {
         if (hash[i] != 0) {
             return 0;
         }
     }
-    if ((d % 2) == 1 && hash[d/2] & 0b11110000 != 0) {
+    
+  
+
+    
+    if ( ((d % 2) == 1) &&  ( (hash[(d/2)] & 0b11110000) != 0b00000000)) {      //Si notre d est impair, on doit regarder une case de plus, mais seulement le premier des deux chiffres de la représentation en hexadécimal
         return 0;
     }
+    
+    for ( int i = 0; i < SHA256_DIGEST_LENGTH ; i ++){
+        printf ( "%02x " , hash[ i ]) ;        
+    }
+    printf("\n");
     return 1;
 }
 
@@ -186,13 +197,13 @@ void compute_proof_of_work(Block *B, int d){
 
     int verif_d = 0;
     char* s;
-    do {
+    while(verif_d == 0){
         s = block_to_str(B);
         B->hash = hash_function_SHA256(s);
         B->nonce ++;
         verif_d = verifie_nb_d(B->hash,d);
         free(s);
-    } while (!verif_d);
+    } 
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
 int verify_block(Block* B, int d) {
@@ -206,7 +217,14 @@ int verify_block(Block* B, int d) {
 }
 
 void generate_fichier_comparaison(Block* b,int nb_d_max){
+
     FILE* fichier = fopen("comparaison_d.txt","w");
+
+    if(fichier == NULL){
+        printf("Erreur à l'ouverture du fichier\n");
+        return;
+    }
+
     /*Variables pour le temps*/
 	clock_t temps_initial;
 	clock_t temps_final;
@@ -214,6 +232,7 @@ void generate_fichier_comparaison(Block* b,int nb_d_max){
     srand(time(NULL));
     
     for (int i = 0; i<nb_d_max; i++){
+
         temps_initial = clock();
         compute_proof_of_work(b,i);
         temps_final = clock();
