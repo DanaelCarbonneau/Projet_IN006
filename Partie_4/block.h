@@ -17,7 +17,8 @@ typedef struct block {
 /*Fonction permettant d'écrire dans un fichier un block*/
 void write_block(char* nom_fichier,Block*b);
 
-/*Fonction permettant de lire un block dans un fichier*/
+/*Fonction permettant de lire un block dans un fichier. Attention : lorsqu'on lit le block, la mémoire est dynamique pour 
+les valeurs de hachage, il faut donc ne pas oublier de les libérer !*/
 Block* read_block(char*nom_fichier);
 
 /*Fonction permettant d'obtenir une chaîne de caractères au bon format (hexadécimal) pour nos valeurs de hachage*/

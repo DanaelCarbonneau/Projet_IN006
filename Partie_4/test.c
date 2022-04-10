@@ -34,14 +34,18 @@ int main(){
   }else{
     char * s_hash = hash_to_str(b_bis->hash);
     char * s_prev = hash_to_str(b_bis->previous_hash);    
+    char * kts = key_to_str(b_bis->author);
     
-    printf("La clé : %s \nLe hash : %s \nLe previous hash : %s \nLe nonce : %d \tLes votes : \n",key_to_str(b_bis->author),s_hash,s_prev,b_bis->nonce);
+    printf("La clé : %s \nLe hash : %s \nLe previous hash : %s \nLe nonce : %d \tLes votes : \n",kts,s_hash,s_prev,b_bis->nonce);
     free(s_hash);
     free(s_prev);
-    //print_list_protected(b_bis->votes);
+    free(kts);
+    print_list_protected(b_bis->votes);
   }
 
   free(b_bis->author);
+  free(b_bis->hash);
+  free(b_bis->previous_hash);
   free(skey_author);
   delete_list_protected(b_bis->votes);
   free(b_bis);
