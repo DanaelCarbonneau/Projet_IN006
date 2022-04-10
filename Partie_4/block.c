@@ -207,6 +207,7 @@ char * hash_to_str(unsigned char* hash){
         res[j]= buffer[0];
         res[j+1] = buffer[1];
         res[j+2] = buffer[2];
+
         j = j +3;
     }
     res[taille_chaine-1] = '\0';
@@ -222,6 +223,8 @@ unsigned char * str_to_hash(char * st){
         buffer_l[0] = st[i];
         buffer_l[1] = st[i+1];
         buffer_l[2] = st[i+2];
+        buffer_l[3] = '\0';
+
 
         if(sscanf(buffer_l,"%02x",&stock)!=1){
             printf("Erreur de formatage du hachage hexadécimal\n");
