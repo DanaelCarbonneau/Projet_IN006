@@ -29,7 +29,19 @@ void print_tree(CellTree* ab);
 void delete_node(CellTree* node);
 
 /*Fonction qui supprime un arbre ab*/
-void delete_tree(CellTree ab);
+void delete_tree(CellTree* ab);
 
+
+/*Fonction qui retourne un pointeur vers le noeud fils avec la plus grande hauteur*/
+CellTree* highest_child(CellTree* cell);
+
+
+/*Fonction qui retourne la cellule du dernier nœud de la plus longue branche de tree*/
+CellTree* last_node(CellTree*tree);
+
+
+/*Fonction qui retourne la liste chaînée de déclarations chaînées obtenue en fusionnant celles de tous les blocks du plus long fils*/
+
+CellProtected* fusion_arbre(CellTree* tree);
 
 #endif
