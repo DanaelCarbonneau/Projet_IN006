@@ -127,13 +127,6 @@ CellProtected* extraction_protected(CellTree* ab){
 	while (fils_courant){
 		liste_pr_cour = fils_courant->block->votes;
 		fusion_liste_protected(liste_pr_cour, res);
-		frere_courant = fils_courant->nextBro;
-		while (frere_courant){
-			liste_pr_cour = frere_courant->block->votes;
-			fusion_liste_protected(liste_pr_cour, res);
-			frere_courant = frere_courant->nextBro;
-		}
-		fils_courant = fils_courant->firstChild;
 	}
 	return res;	
 }
