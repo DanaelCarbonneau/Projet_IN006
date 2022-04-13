@@ -385,3 +385,16 @@ void generate_fichier_comparaison(Block* b,int nb_d_max){
     fclose(fichier);
 }
 
+void delete_block(Block* b){
+    
+
+    CellProtected* courant = b->votes;
+    CellProtected* tmp;
+    while(courant){
+        tmp = courant->next;
+        free(courant);
+        courant = tmp;
+    }
+
+    free(b);
+}

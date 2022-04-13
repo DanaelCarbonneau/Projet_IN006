@@ -44,16 +44,13 @@ int main(){
   }
 
   free(b_bis->author);
-  free(b_bis->hash);
-  free(b_bis->previous_hash);
-  free(skey_author);
-  delete_list_protected(b_bis->votes);
-  free(b_bis);
-  
-  
+  delete_block(b_bis);      //Fuites mémoires issues du fait que le block ne supprime pas les valeurs des protected, volontaire pour nos tests
+
+
   /*Libération mémoire*/
 
   free(b->author);
+ // free(b->hash);
   delete_list_protected(b->votes);
   free(b);
 }

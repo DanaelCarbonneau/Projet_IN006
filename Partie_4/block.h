@@ -46,4 +46,12 @@ int verify_block(Block* b, int d);
 /*Fonction qui permet de générer un fichier donnant pour chaque d entre 0 et nb_max_d le temps nécessaire pour obtenir une valeur hachée avec d 0*/
 void generate_fichier_comparaison(Block* b,int nb_d_max);
 
+
+/*Fonction supprimant un block, mais ne libérant pas son champ author. Pour la chaîne de votes, on supprime la cellule, mais pas 
+les protected qu'elle contient.*/
+void delete_block(Block* b);
+
+
+
+
 #endif
