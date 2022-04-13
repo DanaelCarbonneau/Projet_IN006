@@ -29,7 +29,7 @@ void print_tree(CellTree* ab);
 void delete_node(CellTree* node);
 
 /*Fonction qui supprime un arbre ab*/
-void delete_tree(CellTree ab);
+void delete_tree(CellTree* ab);
 
 
 #endif
