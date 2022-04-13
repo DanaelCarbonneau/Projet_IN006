@@ -32,6 +32,7 @@ void delete_node(CellTree* node);
 void delete_tree(CellTree* ab);
 
 
+
 /*Fonction qui retourne un pointeur vers le noeud fils avec la plus grande hauteur*/
 CellTree* highest_child(CellTree* cell);
 
@@ -40,8 +41,11 @@ CellTree* highest_child(CellTree* cell);
 CellTree* last_node(CellTree*tree);
 
 
-/*Fonction qui retourne la liste chaînée de déclarations chaînées obtenue en fusionnant celles de tous les blocks du plus long fils*/
 
+/*Fonction permettant de fusionner deux listes simplement chaînées de protected l1 et l2*/
+CellProtected* fusion_liste_protected(CellProtected* l1, CellProtected* l2);
+
+/*Fonction qui retourne la liste chaînée de déclarations chaînées obtenue en fusionnant celles de tous les blocks du plus long fils*/
 CellProtected* fusion_arbre(CellTree* tree);
 
 #endif

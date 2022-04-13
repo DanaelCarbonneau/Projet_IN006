@@ -18,6 +18,13 @@ CellTree* create_node(Block* b){
     return res;
 }
 
+int update_height(CellTree* father, CellTree* child){
+	if ((child->height + 1) > father->height){
+		father->height = child->height + 1;
+		return 1;
+	} return 0;
+}
+
 void add_child(CellTree* father, CellTree* child){
     child->father = father;
 
@@ -38,10 +45,47 @@ void add_child(CellTree* father, CellTree* child){
     }
 }
 
+void print_tree(CellTree* ab){
+	if (ab == NULL){
+		printf("L'arbre est vide !");
+	}	
+	printf("hauteur = %d, hash = %s", ab->height, hash_to_str(ab->block->hash));
+	CellTree* fils_courant = ab->firstChild;
+	CellTree* frere_courant;
+	while (fils_courant){
+		printf("hauteur = %d, hash = %s", fils_courant->height, hash_to_str(fils_courant->block->hash));
+		frere_courant = fils_courant->nextBro;
+		while (frere_courant){
+			printf("hauteur = %d, hash = %s", frere_courant->height, hash_to_str(frere_courant->block->hash));
+			frere_courant = frere_courant->nextBro;
+		}
+		fils_courant = fils_courant->firstChild;
+	}
+}
 
 void delete_node(CellTree* node){
     delete_block(node->block);
     free(node);
+}
+
+void delete_tree(CellTree* ab){
+	if (ab != NULL){	
+		CellTree* fils_courant = ab->firstChild;
+		CellTree* frere_courant;
+		CellTree* tmp;
+		delete_node(ab);
+		while (fils_courant){
+			tmp = fils_courant->firstChild;
+			frere_courant = fils_courant->nextBro;
+			delete_node(fils_courant);
+			fils_courant = tmp;
+			while (frere_courant){
+				tmp = frere_courant->nextBro;	
+				delete_node(frere_courant);
+				frere_courant = tmp;
+			}
+		}
+	}	
 }
 
 
@@ -69,6 +113,21 @@ CellTree* last_node(CellTree* tree){
         return last_node(highest_child(tree));          //Fonction récursive terminale
     }
 }
+
+
+
+CellProtected* fusion_liste_protected(CellProtected* l1, CellProtected* l2){
+	if (l1 == NULL){
+		return l2;
+	}
+	CellProtected* cour = l1;
+	while (cour->next){
+		cour = cour->next;
+	}
+	cour->next = l2;
+	return l1;
+}
+
 
 
 CellProtected* fusion_arbre(CellTree* tree){

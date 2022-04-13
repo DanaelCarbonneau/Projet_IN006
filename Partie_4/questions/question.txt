@@ -1,0 +1,5 @@
+
+1/Gestion de la mémoire avec delete block et les fonctions de hachage
+
+
+2/Comment on affiche l'arbre ?
