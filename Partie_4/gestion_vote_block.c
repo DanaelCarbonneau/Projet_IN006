@@ -4,10 +4,11 @@
 
 void submit_vote(Protected* p){
 	FILE* f = fopen("Pending_votes.txt","a");
-	while ( !feof(f) ) {
-        	fgetc(f);
-	}
-	fprintf(f,"%s",protected_to_str(p));
+	
+	char* pr = protected_to_str(p);
+	fprintf(f,"%s\n",pr);
+	free(pr);
+	fclose(f);
 }
 
 
@@ -19,9 +20,15 @@ void create_block(CellTree* tree, Key* author, int d){
         printf("Erreur à l'allocation du block\n");
         return;
     }
-    CellTree* previous = last_node(tree);       //Il faut bien récupérer le last node au début pour avoir la valeur de previous_hash
 
-    b->previous_hash = previous->block->hash;
+	if(tree == NULL){
+		b->previous_hash = "0";
+	}
+	else{
+    	CellTree* previous = last_node(tree);       //Il faut bien récupérer le last node au début pour avoir la valeur de previous_hash
+		b->previous_hash = previous->block->hash;
+	}
+	
     b->author = author;
     b->votes = read_protected("pending_votes.txt");
 
@@ -57,13 +64,13 @@ int estFils(CellTree* noeud, CellTree* pere){
 CellTree* read_tree(){
 	DIR* rep = opendir("./Blockchain/");
 	
-	/*Cr�ation de T*/
+	/*Création de T*/
 	CellTree** T;
 	int size_T = 0;
 	if (rep != NULL){
 		struct dirent* dir;
 		while ((dir = readdir(rep))){
-			if (strcmp(dir->name,".")!=0 && strcmp(dir->name,"..")!=0){
+			if (strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0){
 				size_T++;
 			}
 		}
@@ -82,8 +89,8 @@ CellTree* read_tree(){
 	if (rep != NULL){
 		struct dirent* dir;
 		while ((dir = readdir(rep))){
-			if (strcmp(dir->name,".")!=0 && strcmp(dir->name,"..")!=0){
-				block = read_block(dir->name);
+			if (strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0){
+				block = read_block(dir->d_name);
 				noeud = create_node(block);
 				T[n] = noeud;
 				n++;
@@ -105,7 +112,7 @@ CellTree* read_tree(){
 	}
 
 	/*Trouver et retourner la racine*/
-	for (int k = 0, k < size_T; k++){
+	for (int k = 0; k < size_T; k++){
 		n_cour = T[k];
 		if (n_cour->father == NULL){
 			return n_cour;

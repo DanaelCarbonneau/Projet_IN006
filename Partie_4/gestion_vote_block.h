@@ -3,7 +3,8 @@
 
 #include<dirent.h>
 #include"block_tree.h"
-#include"gestion_hachage.h"
+#include"../Partie_3/gestion_hachage.h"
+#include"../Partie_3/chaine_cle.h"
 
 /*Fonction qui permet d'ajouter le vote déclaré par p à la fin du fichier Pending_votes.txt*/
 void submit_vote(Protected* p);

@@ -129,8 +129,8 @@ Key* compute_winner(CellProtected* decl, CellKey* candidates, CellKey* voters, i
 			
                 H_c->tab[pos_hypo_c]->val++;            //On ajoute une voix au candidat
                 H_v->tab[pos_hypo_v]->val=1;                 //Le votant dans la tab a alors déjà voté
-		free(candidat_choisi);
-            }
+			}
+			free(candidat_choisi);
         }
         courant = courant->next;                //On a fini de traiter le votant courant, on passe au suivant
     }

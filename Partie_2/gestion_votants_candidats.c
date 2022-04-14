@@ -89,7 +89,7 @@ Protected* emission_vote(Votant electeur, Key** tabC,int nc){
     int tirage = rand()%nc;
     char* declaration = key_to_str(tabC[tirage]);
 
-    Protected* declaration_vote = (Protected*) malloc(sizeof(Protected));
+    Protected* declaration_vote;
 
     /*On initialise tous les champs de notre protected*/
 

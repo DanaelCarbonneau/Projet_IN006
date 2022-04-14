@@ -17,7 +17,7 @@ int main(){
   init_pair_keys(pkey_author,skey_author,10,12); //on se donne une clé dont on se fiche des valeurs ? 
   b->author = pkey_author;
   b->votes = read_protected("../Partie_2/declarations.txt");
-  b->previous_hash = "J«»áÑyÂ«_y6{VÚÝºn³­öÏS";
+  b->previous_hash = "J«»áÑyÂ«_y6{VÚÝºn³­öÏS";      //On a calculé une valeur de hachage précédemment qu'on a converti en chaîne de caractères
   b->nonce = 0;
 
 
@@ -50,6 +50,7 @@ int main(){
   /*Libération mémoire*/
 
   free(b->author);
+
  // free(b->hash);
   delete_list_protected(b->votes);
   free(b);

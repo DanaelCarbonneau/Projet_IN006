@@ -129,7 +129,6 @@ CellProtected* fusion_liste_protected(CellProtected* l1, CellProtected* l2){
 }
 
 
-
 CellProtected* fusion_arbre(CellTree* tree){
     CellProtected* res = tree->block->votes;
 

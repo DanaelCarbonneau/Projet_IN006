@@ -32,8 +32,6 @@ void delete_node(CellTree* node);
 void delete_tree(CellTree* ab);
 
 
-<<<<<<< HEAD
-
 /*Fonction qui retourne un pointeur vers le noeud fils avec la plus grande hauteur*/
 CellTree* highest_child(CellTree* cell);
 
@@ -50,6 +48,3 @@ CellProtected* fusion_liste_protected(CellProtected* l1, CellProtected* l2);
 CellProtected* fusion_arbre(CellTree* tree);
 
 #endif
-=======
-#endif
->>>>>>> 157cbc336fbdc58e5da839b0d3167926990bc900

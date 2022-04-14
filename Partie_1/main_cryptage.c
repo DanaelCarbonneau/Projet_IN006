@@ -30,5 +30,8 @@ int main (){
     char * decoded = decrypt ( crypted , len , u , n ) ;
     printf ( " Decoded : %s \n" , decoded ) ;
 
+    free(crypted);
+    free(decoded);
+
     return 0;
 }

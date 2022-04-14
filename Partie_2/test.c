@@ -84,10 +84,9 @@ int main ( void ) {
     liberer_protected(pr);
 
     pr = str_to_protected( chaine ) ;
-    liberer_protected(pr);
    
 
-    #if 0
+    
     char * kts = key_to_str ( pr-> pKey );
     char * stk = signature_to_str( pr-> sgn );
     printf ("str_to_protected : %s %s %s \n" , kts ,pr-> mess , stk) ;
@@ -95,7 +94,7 @@ int main ( void ) {
     liberer_protected(pr);
     free(kts);
     free(stk);
-    #endif
+    
     free(chaine);
 
 
@@ -107,7 +106,6 @@ int main ( void ) {
     printf("\n\n\n~~~~~~~~~~~~~~~\nEssais sur la gestion de candidats\n");
 
     generate_random_data(100,5);
-
 
     return 0;
 

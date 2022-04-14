@@ -14,10 +14,6 @@ void write_block(char* nom_fichier, Block* b){
     unsigned char* previous = b->previous_hash;
     int nonce = b->nonce;
 
-    #if 0
-    fprintf(fichier_blocks,"%s\t%s\t%s\t%d\n",cle,hash,previous,nonce);
-    #endif
-
     fprintf(fichier_blocks,"%s\n",cle);
 
     char * s_hash = hash_to_str(hash);
@@ -28,19 +24,7 @@ void write_block(char* nom_fichier, Block* b){
     free(s_hash);
     free(s_prev);
 
-    #if 0
-
-    La solution au dessus utilise la fonction hash_to_str, ça semble plus élégant
-
-    for(int i = 0; i < SHA256_DIGEST_LENGTH ; i++){
-        fprintf(fichier_blocks,"%02x ",hash[i]);
-    }
-    fprintf(fichier_blocks,"\n");
-    for(int i = 0; i < SHA256_DIGEST_LENGTH ; i++){
-        fprintf(fichier_blocks,"%02x ",previous[i]);
-    }
-    fprintf(fichier_blocks,"\n%d\n",nonce);
-    #endif
+    
 
     CellProtected* courant = b->votes;
     char* prtctd_cour;
@@ -84,13 +68,7 @@ Block* read_block(char*nom_fichier){
     char buffer[256];
     fgets(buffer,256,fichier_lecture);
 
-    #if 0
-    if(sscanf(buffer,"%s\t%s\t%s\t%d\n",cle,hash,previous,&nonce)!=4){
-        printf("Erreur de formatage dans le fichier (infos avant la chaine) !\n");
-        free(res);
-        return NULL;
-    }
-    #endif
+    
 
     if(sscanf(buffer,"%s",cle)!=1){
         printf("Erreur de lecture de la clé\n");
@@ -116,49 +94,7 @@ Block* read_block(char*nom_fichier){
         return NULL;
     }
 
-    #if 0
-
-    Pareil, version du dessus plus élégante
-
-    int j = 0;
-    char buffer_l[4];
-    unsigned int stock;
-
-    for(int i = 0 ; i < 3*SHA256_DIGEST_LENGTH ; i = i + 3){
-        buffer_l[0] = buffer[i];
-        buffer_l[1] = buffer[i+1];
-        buffer_l[2] = buffer[i+2];
-
-        if(sscanf(buffer_l,"%02x",&stock)!=1){
-            printf("Erreur de formatage du hachage hexadécimal\n");
-            free(res);
-            return NULL;
-        }
-        hash[j] = stock;      
-        j++;
-        
-
-    }
-
-    fgets(buffer,256,fichier_lecture);
-    j = 0;
-    for(int i = 0 ; i < 3*SHA256_DIGEST_LENGTH ; i = i + 3){
-        buffer_l[0] = buffer[i];
-        buffer_l[1] = buffer[i+1];
-        buffer_l[2] = buffer[i+2];
-
-        if(sscanf(buffer_l,"%02x",&stock)!=1){
-            printf("Erreur de formatage du hachage hexadécimal\n");
-            free(res);
-            return NULL;
-        }
-        previous[j] = stock;
-        j++;
     
-    }
-
-    #endif
-
     fgets(buffer,256,fichier_lecture);
     if(sscanf(buffer,"%d",&nonce)!=1){
         printf("Erreur dans le scan de la preuve de travail \n");
@@ -299,23 +235,7 @@ unsigned char* hash_function_SHA256(const char* s){
     return hash;
 }
 
-#if 0
-int verifie_nb_d(unsigned char* hash,int d){
-    /*hash est représentée en binaire => on demande à ce que commence par quatre d 0*/        //D : pour moi là ça marche pas parce qu'on regarde juste les 4 premiers et pas les 4d premiers
-    //E: j'ai essayé de corriger du coup!
-	
-    if (strlen(hash) < 4*d){        //Condition inutile : hash est de taille constante
-        return 0;
-    } else{
-        for (int i = 0; i < 4*d ; i++){     //Trop de cases regardées
-		if (hash[i] != 0){
-			return 0;
-		}
-	}
-	return 1;
-    }
-}
-#endif
+
 
 
 int verifie_nb_d(unsigned char *hash, int d) {
@@ -386,8 +306,6 @@ void generate_fichier_comparaison(Block* b,int nb_d_max){
 }
 
 void delete_block(Block* b){
-    
-
     CellProtected* courant = b->votes;
     CellProtected* tmp;
     while(courant){
