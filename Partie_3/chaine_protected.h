@@ -23,7 +23,7 @@ CellProtected* ajoutEnTete_protected(Protected* pr, CellProtected* liste);
 
 
 /*Fonction permettant de lire dans un fichier des protected et d'en créer une liste chainée*/
-CellProtected* read_protected();
+CellProtected* read_protected(char* name);
 
 
 /* ́fonction permettant d’afficher une liste chainée de protected LCP*/

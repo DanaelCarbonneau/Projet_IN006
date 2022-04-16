@@ -40,9 +40,15 @@ void create_block(CellTree* tree, Key* author, int d){
 
 void add_block(int d, char* name){
 	Block* new_b = read_block("Pending_block.txt");
+	compute_proof_of_work(new_b,d);
+	
+	char buffer[256];
+	printf("%s,%s\n",key_to_str(new_b->author), hash_to_str(new_b->hash));
+	//print_list_protected(new_b->votes);
+
 	if (verify_block(new_b,d)){
-		char[256] buffer;
-		sprintf(buffer,"../BlockChain/%s",name);
+		printf("Passage\n");
+		sprintf(buffer,"../Blockchain/%s",name);
 		write_block(buffer,new_b);
 		/* DEPLACER LE BLOCK ??? */
 	} remove("Pending_block.txt");
@@ -60,11 +66,12 @@ int estFils(CellTree* noeud, CellTree* pere){
 
 CellTree* read_tree(){
 	DIR* rep = opendir("../Blockchain/");
-
+	
 	if(rep == NULL){
 		printf("Erreur ouverture du dossier\n");
 		return NULL;
 	}
+	printf("Ouverture du répertoire OK\n");
 	
 	/*Création de T*/
 	CellTree** T;
@@ -77,38 +84,49 @@ CellTree* read_tree(){
 			}
 		}
 	}
+	
 
 	T = (CellTree**)(malloc(sizeof(CellTree*)*size_T));
 	if (T == NULL){
 		printf("Erreur d'allocation mémoire !\n");
 		return NULL;
 	}
+
+	printf("Creation de T OK\n");
 	
 	/*Création et ajout des noeuds � T*/
+	printf("Début de l'ajout des nœuds\n");
 	CellTree* noeud;
 	int n = 0;
 	Block* block;
 	if (rep != NULL){
+		printf("Parcourt du répertoire\n");
 		struct dirent* dir;
 		while ((dir = readdir(rep))){
 			if (strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0){
+				printf("On lit le block\n");
 				block = read_block(dir->d_name);
 				noeud = create_node(block);
 				T[n] = noeud;
 				n++;
 			}
+
 		}
 	}
-	
+	printf("Fin du parcourt du répertoire\n");
 	/*Parcourt des noeuds et liens p�re-fils*/
 	CellTree* n_cour; 
 	CellTree* fils_potentiel;
+	printf("Parcourt du tableau pour faire les liens père fils\n");
 	for (int i = 0; i < size_T; i++){
 		n_cour = T[i];
 		for (int j = 0; j < size_T; j++){
 			fils_potentiel = T[j];
+			printf("On cherche si la case est un fils potentiel\n");
 			if ( estFils(fils_potentiel,n_cour)){
+				printf("On a trouvé un fils\n");
 				add_child(n_cour,fils_potentiel);
+				printf("On a fini d'ajouter l'enfant\n");
 			}
 		}	
 	}

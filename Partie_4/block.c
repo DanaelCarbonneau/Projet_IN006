@@ -5,7 +5,7 @@ void write_block(char* nom_fichier, Block* b){
     FILE* fichier_blocks = fopen(nom_fichier,"w");
 
     if(fichier_blocks==NULL){
-        printf("Erreur à l'ouverture du fichier !\n");
+        printf("Erreur à l'ouverture du fichier (write block)!\n");
         return;
     }
 
@@ -45,7 +45,7 @@ Block* read_block(char*nom_fichier){
     
 
     if(fichier_lecture == NULL){
-        printf("Erreur d'ouverture du fichier !\n");
+        printf("Erreur d'ouverture du fichier (dans read block)!\n");
         return NULL;
     }
   
@@ -83,8 +83,11 @@ Block* read_block(char*nom_fichier){
     fgets(l_prev,256,fichier_lecture);
 
     hash = str_to_hash(l_hash);
+
     
     previous = str_to_hash(l_prev);
+
+    printf("%s,%s\n",hash,previous);
 
     if(hash == NULL || previous == NULL){
         printf("Erreur dans la lecture des valeurs de hachage !\n");
@@ -260,12 +263,15 @@ void compute_proof_of_work(Block *B, int d){
     int verif_d = 0;
     char* s;
     while(verif_d == 0){
+        
         s = block_to_str(B);
+        //printf("block to str : %s\n",s);
         B->hash = hash_function_SHA256(s);
         B->nonce ++;
         verif_d = verifie_nb_d(B->hash,d);
         free(s);
     } 
+    printf("hash de b : %s\n",hash_to_str(B->hash));
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
 int verify_block(Block* B, int d) {

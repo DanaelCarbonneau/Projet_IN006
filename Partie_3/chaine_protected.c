@@ -18,8 +18,8 @@ CellProtected* ajoutEnTete_protected(Protected* pr, CellProtected* liste){
 }
 
 
-CellProtected* read_protected(){
-	FILE* f = fopen("../Partie_2/declarations.txt","r");
+CellProtected* read_protected(char* name){
+	FILE* f = fopen(name,"r");
 	if (f==NULL){
 		printf("Erreur d'ouverture du fichier.");
 		return NULL;
@@ -27,6 +27,7 @@ CellProtected* read_protected(){
 	CellProtected* liste = NULL;
 	char ligne[256];
 	while (fgets(ligne, 256,f)!=NULL){
+		printf("Ligne lue : %s.\n",ligne);
 		Protected* nouv = str_to_protected(ligne);
 		liste = ajoutEnTete_protected(nouv,liste);
 	}
@@ -35,13 +36,16 @@ CellProtected* read_protected(){
 }
 
 void print_list_protected(CellProtected* LCP){
+	printf("Help\n");
     CellProtected* courant = LCP;
-    while (courant){
+    while (courant!=NULL){
+		printf("Entrée de boucle\n");
 		char * str = protected_to_str(courant->data);
         printf("%s",str);
-        courant = courant->next;
 		free(str);
+        courant = courant->next;
     }
+	printf("Fin de boucle\n");
 }
 
 

@@ -38,11 +38,14 @@ void add_child(CellTree* father, CellTree* child){
 
     CellTree* father_cour = father;
     CellTree* child_cour = child;
-
+    
     while( (father_cour) && (update_height(father_cour,child_cour)) ){
+        printf("Passage dans la boucle dans add_child\n");
         child_cour = father_cour;
         father_cour = father_cour->father;
+        printf("%d",father_cour->father);
     }
+    
 }
 
 void print_tree(CellTree* ab){
