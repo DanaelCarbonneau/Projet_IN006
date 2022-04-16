@@ -26,7 +26,7 @@ int find_position(HashTable* t, Key* key){
 	int pos_init = hash_function(key,t->size);
 	int pos = pos_init;
 	while ( (pos != pos_init-1) && (t->tab[pos] != NULL)){
-		if (compare_cles(t->tab[pos_init]->key,key)){
+		if (compare_cles(t->tab[pos]->key,key)){
 			return pos;
 		}else{
 			pos++; /*Gestion par probing linéaire : s'il n'est pas là, essayer le suivant.*/
@@ -35,7 +35,7 @@ int find_position(HashTable* t, Key* key){
 		Continuer jusqu'à ce qu'on revienne à pos_init.*/
 			pos = 0;
 		}
-	} if ((pos == pos_init-1) && (t->tab[pos]!=NULL)){
+	} if ((pos == pos_init-1) && (t->tab[pos]==NULL)){
 		printf("Table pleine!"); /*D'après la remarque, on ne devrait jamais rencontrer cette situation.*/
 		return -1;
 	}
