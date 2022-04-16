@@ -62,10 +62,9 @@ int estFils(CellTree* noeud, CellTree* pere){
 }
 
 
-
-
 CellTree* read_tree(){
 	DIR* rep = opendir("../Blockchain/");
+	struct dirent* dir;
 	
 	if(rep == NULL){
 		printf("Erreur ouverture du dossier\n");
@@ -77,13 +76,12 @@ CellTree* read_tree(){
 	CellTree** T;
 	int size_T = 0;
 	if (rep != NULL){
-		struct dirent* dir;
 		while ((dir = readdir(rep))){
 			if (strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0){
 				size_T++;
 			}
 		}
-	}
+	} 
 	
 
 	T = (CellTree**)(malloc(sizeof(CellTree*)*size_T));
@@ -95,31 +93,46 @@ CellTree* read_tree(){
 	printf("Creation de T OK\n");
 	
 	/*Création et ajout des noeuds � T*/
+	rewinddir(rep);
+
 	printf("Début de l'ajout des nœuds\n");
 	CellTree* noeud;
 	int n = 0;
 	Block* block;
+	char* nom_f_block;
 	if (rep != NULL){
 		printf("Parcourt du répertoire\n");
-		struct dirent* dir;
-		while ((dir = readdir(rep))){
+		while (dir = readdir(rep)){
+			//printf("dir pas null %d", dir == NULL);
 			if (strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0){
 				printf("On lit le block\n");
-				block = read_block(dir->d_name);
+				
+				nom_f_block = (char*)(malloc(sizeof(char)*(strlen("../Blockchain/")+strlen(dir->d_name)+1)));
+				strcpy(nom_f_block,"../Blockchain/");
+				strcat(nom_f_block,dir->d_name);
+			
+				block = read_block(nom_f_block);
+				free(nom_f_block);
+
 				noeud = create_node(block);
 				T[n] = noeud;
+
 				n++;
 			}
 
 		}
 	}
 	printf("Fin du parcourt du répertoire\n");
+
 	/*Parcourt des noeuds et liens p�re-fils*/
+	rewinddir(rep);
+
 	CellTree* n_cour; 
 	CellTree* fils_potentiel;
 	printf("Parcourt du tableau pour faire les liens père fils\n");
 	for (int i = 0; i < size_T; i++){
 		n_cour = T[i];
+		printf("papa est null %d",n_cour->father == NULL);
 		for (int j = 0; j < size_T; j++){
 			fils_potentiel = T[j];
 			printf("On cherche si la case est un fils potentiel\n");
@@ -129,6 +142,7 @@ CellTree* read_tree(){
 				printf("On a fini d'ajouter l'enfant\n");
 			}
 		}	
+		
 	}
 
 	/*Trouver et retourner la racine*/
@@ -138,10 +152,10 @@ CellTree* read_tree(){
 			return n_cour;
 		}
 	}
-
-
 	closedir(rep);
 }
+
+
 
 CellProtected* extraction_protected(CellTree* ab){
 	if (ab == NULL){
