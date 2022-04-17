@@ -28,48 +28,86 @@ int update_height(CellTree* father, CellTree* child){
 void add_child(CellTree* father, CellTree* child){
     child->father = father;
 
-    if(father->firstChild == NULL){
-        father->firstChild = child;
-    }
-    else{
-        child->nextBro = father->firstChild;
-        father->firstChild = child;
-    }
+    
+    child->nextBro = father->firstChild;
+    father->firstChild = child;
 
     CellTree* father_cour = father;
     CellTree* child_cour = child;
     
     while( (father_cour) && (update_height(father_cour,child_cour)) ){
-        printf("Passage dans la boucle dans add_child\n");
         child_cour = father_cour;
         father_cour = father_cour->father;
-        printf("%d",father_cour->father);
+        
     }
     
 }
 
+
 void print_tree(CellTree* ab){
-	if (ab == NULL){
-		printf("L'arbre est vide !");
-	}	
-	printf("hauteur = %d, hash = %s", ab->height, hash_to_str(ab->block->hash));
-	CellTree* fils_courant = ab->firstChild;
-	CellTree* frere_courant;
-	while (fils_courant){
-		printf("hauteur = %d, hash = %s", fils_courant->height, hash_to_str(fils_courant->block->hash));
-		frere_courant = fils_courant->nextBro;
-		while (frere_courant){
-			printf("hauteur = %d, hash = %s", frere_courant->height, hash_to_str(frere_courant->block->hash));
-			frere_courant = frere_courant->nextBro;
-		}
-		fils_courant = fils_courant->firstChild;
-	}
+    if(ab==NULL){
+        return;
+    }
+
+    char* s = hash_to_str(ab->block->hash);
+    printf("\n%s\t hauteur : %d\n",s,ab->height);
+    free(s);
+    print_tree(ab->firstChild);
+
+
+    CellTree* courant = ab->nextBro;
+    while(courant){
+
+        s = hash_to_str(courant->block->hash);
+        printf("\n%s\t hauteur : %d\n",s,courant->height);
+        free(s);
+
+        print_tree(courant->firstChild);
+        courant = courant->nextBro;
+    }
+
 }
+
+
+
+
 
 void delete_node(CellTree* node){
     delete_block(node->block);
     free(node);
 }
+
+
+
+
+void delete_tree(CellTree* ab){
+    if(ab==NULL){
+        return;
+    }
+
+    CellTree* tmp = ab->firstChild;
+    CellTree* courant = ab->nextBro;
+    CellTree* a_supprimer;
+
+    printf("Passage avant les delete, hauteur de ab : %d\n",ab->height);
+    delete_node(ab);
+    delete_tree(tmp);
+
+    while(courant){
+        printf("Passage dans la boucle, hauteur du courant : %d\n", courant->height);
+        a_supprimer = courant;
+        tmp = courant->firstChild;
+        courant = courant->nextBro;
+        
+        delete_node(a_supprimer);
+        delete_tree(tmp);
+    }
+
+}
+
+
+
+#if 0
 
 void delete_tree(CellTree* ab){
 	if (ab != NULL){	
@@ -90,6 +128,7 @@ void delete_tree(CellTree* ab){
 		}
 	}	
 }
+#endif 
 
 
 

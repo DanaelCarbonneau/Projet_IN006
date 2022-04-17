@@ -22,7 +22,8 @@ int update_height(CellTree* father, CellTree* child);
 /*Fonction qui ajoute un fils à un nœud en mettant à jour la hauteur de tous les ascendants*/
 void add_child(CellTree* father, CellTree* child);
 
-/*Fonction qui affiche un arbre, pour chaque nœud, elle affiche la hauteur et la valeur hachée du block*/
+/*Fonction qui affiche un arbre, pour chaque nœud, elle affiche la hauteur et la valeur hachée du block
+Le parcours est fait en profondeur. La fonction est à la fois récursive et itérative pour accéder à tout l'arbre.*/
 void print_tree(CellTree* ab);
 
 /*Fonction qui supprime le nœud node en utilisant la fonction delete_block (voir block.c)*/

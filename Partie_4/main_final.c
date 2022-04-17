@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include<dirent.h>
 #include<openssl/sha.h>
 
 
@@ -16,7 +17,7 @@
 
 
 #define D 2
-#define VOTANTS 5
+#define VOTANTS 10
 #define CANDIDATS 2
 
 int main(){
@@ -44,8 +45,7 @@ int main(){
     while (cour_pr){
         submit_vote(cour_pr->data);
         
-        
-        if (cpt%10 == 0){
+        if (cpt%3 == 0){
             create_block(res_tree, k_auteur_public, D);
             char name[256];
             sprintf(name,"B%d.txt",cpt/10);
@@ -54,8 +54,22 @@ int main(){
         
         cpt++;
         cour_pr = cour_pr->next;
-        printf("Passage dans la boucle\n");
     }
+
+    DIR * rep = opendir ( "../Blockchain/") ;
+    if ( rep != NULL ) {
+        struct dirent * dir ;
+
+        while (( dir = readdir ( rep ) ) ) {
+            printf("Passage dans la boucle, readdir = %d\n", readdir(rep));
+            if ( strcmp( dir->d_name, "." ) !=0 && strcmp(dir->d_name , ".." ) !=0) {
+                printf ( "Chemin du fichier : ./Blockchain %s \n" ,dir->d_name ) ;
+            }
+        }
+        closedir ( rep ) ;
+    }
+
+
     printf("Avant read_tree\n");
     CellTree* tree_commun = read_tree();
     printf("Après read_tree\n");

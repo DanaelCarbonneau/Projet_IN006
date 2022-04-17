@@ -87,7 +87,7 @@ Block* read_block(char*nom_fichier){
     
     previous = str_to_hash(l_prev);
 
-    printf("%s,%s\n",hash,previous);
+    
 
     if(hash == NULL || previous == NULL){
         printf("Erreur dans la lecture des valeurs de hachage !\n");
