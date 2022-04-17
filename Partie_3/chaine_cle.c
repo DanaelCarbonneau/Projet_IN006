@@ -23,7 +23,7 @@ CellKey* ajoutEnTete(Key* key, CellKey* liste){
 CellKey* read_public_keys(char* nom_fichier){
 	FILE* f = fopen(nom_fichier,"r");
 	if (f==NULL){
-		printf("Erreur d'ouverture du fichier.");
+		printf("Erreur d'ouverture du fichier Chaine cle.\n");
 		return NULL;
 	}
 	CellKey* liste = NULL;

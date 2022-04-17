@@ -14,43 +14,51 @@ void submit_vote(Protected* p){
 
 void create_block(CellTree* tree, Key* author, int d){
     Block* b = (Block*) malloc(sizeof(Block));
+
+	printf("Affichage de l'arbre lorsqu'on ajoute un block\n");
+	print_tree(tree);
     if(b==NULL){
         printf("Erreur à l'allocation du block\n");
         return;
     }
 
 	if(tree == NULL){
-		b->previous_hash = "0";
+		printf("Passage dans tree == NULL\n");
+		b->previous_hash = "56";
 	}
 	else{
     	CellTree* previous = last_node(tree);       //Il faut bien récupérer le last node au début pour avoir la valeur de previous_hash
 		b->previous_hash = previous->block->hash;
+		printf("Passage dans l'update du previous hash\n");
+		
 	}
 	
     b->author = author;
-    b->votes = read_protected("pending_votes.txt");
+	
+    b->votes = read_protected("Pending_votes.txt");
 
-    remove("pending_votes.txt");        //Le fichier a été lu, on peut le supprimer
+    remove("Pending_votes.txt");        //Le fichier a été lu, on peut le supprimer
 
     compute_proof_of_work(b,d);         //On génère le hash de b
-
+	printf("hash de b avant de l'écrire dans pending block: %s\n",hash_to_str(b->hash));
     write_block("Pending_block.txt",b);
 }
 
 
 void add_block(int d, char* name){
 	Block* new_b = read_block("Pending_block.txt");
+	printf("\navant compute : %s\n",hash_to_str(new_b->hash));
 	compute_proof_of_work(new_b,d);
+	printf("\nAprès compute : %s\n",hash_to_str(new_b->hash));
 	
 	char buffer[256];
-	printf("%s,%s\n",key_to_str(new_b->author), hash_to_str(new_b->hash));
+	printf("\nAffichage de ce qu'on va écrire %s,%s\n",key_to_str(new_b->author), hash_to_str(new_b->hash));
 	//print_list_protected(new_b->votes);
 
 	if (verify_block(new_b,d)){
-		printf("Passage\n");
 		sprintf(buffer,"../Blockchain/%s",name);
 		write_block(buffer,new_b);
-		/* DEPLACER LE BLOCK ??? */
+		
 	} remove("Pending_block.txt");
 }
 
@@ -70,7 +78,6 @@ CellTree* read_tree(){
 		printf("Erreur ouverture du dossier\n");
 		return NULL;
 	}
-	printf("Ouverture du répertoire OK\n");
 	
 	/*Création de T*/
 	CellTree** T;
@@ -90,30 +97,32 @@ CellTree* read_tree(){
 		return NULL;
 	}
 
-	printf("Creation de T OK\n");
 	
 	/*Création et ajout des noeuds � T*/
 	rewinddir(rep);
 
-	printf("Début de l'ajout des nœuds\n");
 	CellTree* noeud;
 	int n = 0;
 	Block* block;
 	char* nom_f_block;
 	if (rep != NULL){
-		printf("Parcourt du répertoire\n");
+		
 		while (dir = readdir(rep)){
 			//printf("dir pas null %d", dir == NULL);
 			if (strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0){
-				printf("On lit le block\n");
 				
+				char nom_f_block[271];		//taille de dir->d_name + 14 caractères pour le répertoire + 1 pour l'arrêt
+
+				sprintf(nom_f_block,"../Blockchain/%s",dir->d_name);
+
+				/*Trop coûteux de faire ça dynamiquement ?
 				nom_f_block = (char*)(malloc(sizeof(char)*(strlen("../Blockchain/")+strlen(dir->d_name)+1)));
 				strcpy(nom_f_block,"../Blockchain/");
 				strcat(nom_f_block,dir->d_name);
+				*/
 			
 				block = read_block(nom_f_block);
-				free(nom_f_block);
-
+				
 				noeud = create_node(block);
 				T[n] = noeud;
 
@@ -122,36 +131,53 @@ CellTree* read_tree(){
 
 		}
 	}
-	printf("Fin du parcourt du répertoire\n");
 
 	/*Parcourt des noeuds et liens p�re-fils*/
 	rewinddir(rep);
 
 	CellTree* n_cour; 
 	CellTree* fils_potentiel;
-	printf("Parcourt du tableau pour faire les liens père fils\n");
+
+	int a_un_pere;
+	int racine_trouvee = 0;
+	CellTree* frere_orphelin;
+	CellTree * racine;
+
 	for (int i = 0; i < size_T; i++){
 		n_cour = T[i];
-		printf("papa est null %d",n_cour->father == NULL);
+		a_un_pere = 0;
 		for (int j = 0; j < size_T; j++){
 			fils_potentiel = T[j];
-			printf("On cherche si la case est un fils potentiel\n");
 			if ( estFils(fils_potentiel,n_cour)){
 				printf("On a trouvé un fils\n");
 				add_child(n_cour,fils_potentiel);
-				printf("On a fini d'ajouter l'enfant\n");
+				a_un_pere = 1;
 			}
-		}	
+		}
+		if (a_un_pere==0){
+			if(!racine_trouvee){
+				frere_orphelin = T[i];
+				racine = T[i];
+				racine_trouvee = 1; 
+				
+			}
+			else{
+				frere_orphelin->nextBro = T[i];
+			}
+		}
 		
 	}
 
-	/*Trouver et retourner la racine*/
+	
+
+	/*On trouve la racine*/
 	for (int k = 0; k < size_T; k++){
 		n_cour = T[k];
 		if (n_cour->father == NULL){
 			return n_cour;
 		}
-	}
+	} 
+
 	closedir(rep);
 }
 
@@ -168,13 +194,17 @@ CellProtected* extraction_protected(CellTree* ab){
 	while (fils_courant){
 		liste_pr_cour = fils_courant->block->votes;
 		fusion_liste_protected(liste_pr_cour, res);
+		fils_courant = highest_child(fils_courant);
 	}
 	return res;	
 }
 
 Key* compute_winner_BT(CellTree* tree, CellKey* candidates, CellKey* voters, int sizeC, int sizeV){
+	printf("Au début ?\n");
 	CellProtected* liste_pr = extraction_protected(tree);
+	printf("Dans supprimer ?\n");
 	liste_pr = supprimer_fausses_declarations(liste_pr);
+	printf("Dans compute winner ?\n");
 	Key* gagnant = compute_winner(liste_pr, candidates, voters, sizeC, sizeV);
 	return gagnant;
 }

@@ -17,10 +17,26 @@
 
 
 #define D 2
-#define VOTANTS 10
-#define CANDIDATS 2
+#define VOTANTS 50
+#define CANDIDATS 5
+#define NB_VOTE_PAR_BLOCK 5
 
 int main(){
+    
+        DIR * rep = opendir ( "../Blockchain/") ;
+    if ( rep != NULL ) {
+        struct dirent * dir ;
+
+        while (( dir = readdir ( rep ) ) ) {
+            
+            if ( strcmp( dir->d_name, "." ) !=0 && strcmp(dir->d_name , ".." ) !=0) {
+                remove(dir->d_name);
+            }
+        }
+        closedir ( rep ) ;
+    }
+
+
     generate_random_data(VOTANTS, CANDIDATS);
     CellProtected* liste_decl = read_protected("declarations.txt");
     CellKey* liste_cles_c = read_public_keys("candidates.txt");
@@ -45,39 +61,39 @@ int main(){
     while (cour_pr){
         submit_vote(cour_pr->data);
         
-        if (cpt%3 == 0){
-            create_block(res_tree, k_auteur_public, D);
+        if (cpt%NB_VOTE_PAR_BLOCK == 0){
+            create_block(res_tree, k_auteur_public,2);
             char name[256];
-            sprintf(name,"B%d.txt",cpt/10);
-            add_block(D, name);         
+            sprintf(name,"B%d.txt",cpt/NB_VOTE_PAR_BLOCK);
+            add_block(D, name);
         }
-        
+
+        if(cpt%3==0){
+            res_tree = read_tree();
+        }
+      
         cpt++;
         cour_pr = cour_pr->next;
     }
 
-    DIR * rep = opendir ( "../Blockchain/") ;
-    if ( rep != NULL ) {
-        struct dirent * dir ;
+printf("Affichage final\n");
+    print_tree(res_tree);
+    printf("Avant compute winner\n");
+    Key* gagnant = compute_winner_BT(res_tree,liste_cles_c,liste_cles_v,CANDIDATS,VOTANTS);
+    printf("Le gagnant est : %s", key_to_str(gagnant));
 
-        while (( dir = readdir ( rep ) ) ) {
-            printf("Passage dans la boucle, readdir = %d\n", readdir(rep));
-            if ( strcmp( dir->d_name, "." ) !=0 && strcmp(dir->d_name , ".." ) !=0) {
-                printf ( "Chemin du fichier : ./Blockchain %s \n" ,dir->d_name ) ;
-            }
-        }
-        closedir ( rep ) ;
-    }
+    
 
-
+#if 0
     printf("Avant read_tree\n");
-    CellTree* tree_commun = read_tree();
+   CellTree* tree_commun = read_tree();
     printf("Après read_tree\n");
     print_tree(tree_commun);
 
+    printf("Avant compute winner\n");
     Key* gagnant = compute_winner_BT(tree_commun,liste_cles_c,liste_cles_v,CANDIDATS,VOTANTS);
     printf("Le gagnant est : %s", key_to_str(gagnant));
-
+#endif 
     free(k_auteur_public);
     free(k_auteur_prive);
 }

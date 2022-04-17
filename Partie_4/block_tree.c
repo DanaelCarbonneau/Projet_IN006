@@ -54,10 +54,8 @@ void print_tree(CellTree* ab){
     free(s);
     print_tree(ab->firstChild);
 
-
     CellTree* courant = ab->nextBro;
     while(courant){
-
         s = hash_to_str(courant->block->hash);
         printf("\n%s\t hauteur : %d\n",s,courant->height);
         free(s);
@@ -81,6 +79,7 @@ void delete_node(CellTree* node){
 
 
 void delete_tree(CellTree* ab){
+    printf("====\nAppel avec %d\n", ab);
     if(ab==NULL){
         return;
     }
@@ -89,12 +88,9 @@ void delete_tree(CellTree* ab){
     CellTree* courant = ab->nextBro;
     CellTree* a_supprimer;
 
-    printf("Passage avant les delete, hauteur de ab : %d\n",ab->height);
     delete_node(ab);
     delete_tree(tmp);
-
     while(courant){
-        printf("Passage dans la boucle, hauteur du courant : %d\n", courant->height);
         a_supprimer = courant;
         tmp = courant->firstChild;
         courant = courant->nextBro;
@@ -108,7 +104,6 @@ void delete_tree(CellTree* ab){
 
 
 #if 0
-
 void delete_tree(CellTree* ab){
 	if (ab != NULL){	
 		CellTree* fils_courant = ab->firstChild;
@@ -121,7 +116,8 @@ void delete_tree(CellTree* ab){
 			delete_node(fils_courant);
 			fils_courant = tmp;
 			while (frere_courant){
-				tmp = frere_courant->nextBro;	
+				tmp = frere_courant->nextBro;
+                delete_tree(frere_courant->firstChild);
 				delete_node(frere_courant);
 				frere_courant = tmp;
 			}
@@ -129,6 +125,9 @@ void delete_tree(CellTree* ab){
 	}	
 }
 #endif 
+
+
+
 
 
 

@@ -2,35 +2,38 @@
 
 
 int main(){
-    Block* lu = read_block("ecriture_bloc.txt");
-    Block* fils_ajoute =(Block*) malloc(sizeof(Block));
-    CellTree* noeud = create_node(lu);
-    fils_ajoute->author = NULL;
-    fils_ajoute->hash = "fuck";
-    fils_ajoute->previous_hash = lu->hash;
-    fils_ajoute->votes = NULL;
+    Block* tab[6];
+    CellTree* nodes[6];
+    int i;
+    for(i = 0 ; i < 6 ; i ++){
+        char name[256];
+        sprintf(name,"ecriture_bloc_%d.txt",i);
+        tab[i] = read_block(name);
+        nodes[i] =  create_node(tab[i]);
+    }
 
-    CellTree* nf = create_node(fils_ajoute);
-    add_child(noeud, nf);
-    
-    CellTree* nf2 = create_node(lu);
-    CellTree* nf3 = create_node(lu);
+    CellTree* racine = nodes[0];
+    add_child(racine,nodes[1]);
+    add_child(racine,nodes[2]);
+    add_child(nodes[2],nodes[3]);
+    add_child(nodes[2],nodes[4]);
+    add_child(nodes[4],nodes[5]);
 
-    add_child(noeud,nf2);
-    add_child(nf,nf3);
    
-    print_tree(noeud);
+    print_tree(racine);
 
-    
+    CellTree* lastNode = last_node(racine);
 
-    printf("Highest_child = %s, sa hauteur : %d\n",hash_to_str(nf->firstChild->block->hash),nf->firstChild->height);
+    printf("Résultat attendu\nLast_node = %d\n",nodes[5]);
 
-    printf("Highest_child = %s\n",hash_to_str(highest_child(noeud)->block->hash));
-
-
-    delete_tree(noeud);
+    printf("Résultat obtenu\nLast_node = %d\n",lastNode);
 
 
+    CellProtected* liste = fusion_arbre(racine);
+    printf("Liste la plus longue obtenue dans l'abre : \n");
+    print_list_protected(liste);
+
+    delete_tree(racine);      
 }
 
     

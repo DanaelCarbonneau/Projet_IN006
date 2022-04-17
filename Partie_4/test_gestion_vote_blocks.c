@@ -43,5 +43,7 @@ int main(){
     
     CellTree* mon_arbre = read_tree();
 
+    print_tree(mon_arbre);
+
 
 }

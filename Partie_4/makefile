@@ -1,4 +1,4 @@
-all : test test_SHA256 main_final test_gestion_vote_blocks
+all : test test_SHA256 main_final test_gestion_vote_blocks test_tree
 
 test_gestion_vote_blocks.o : test_gestion_vote_blocks.c block.h gestion_vote_block.h ../Partie_2/gestion_votants_candidats.h ../Partie_2/gestion_clef.h ../Partie_3/chaine_cle.h ../Partie_3/chaine_protected.h 
 	gcc -c test_gestion_vote_blocks.c -lssl -lcrypto
@@ -8,6 +8,12 @@ test_gestion_vote_blocks : test_gestion_vote_blocks.o block.o block_tree.o gesti
 	gcc -o test_gestion_vote_blocks test_gestion_vote_blocks.o block.o block_tree.o gestion_vote_block.o gestion_votants_candidats.o gestion_clef.o chaine_cle.o chaine_protected.o signature.o gestion_hachage.o tests_primalite.o gestion_cryptage.o -lssl -lcrypto
 
 
+
+test_tree.o : test_tree.c block.h block_tree.h ../Partie_2/gestion_votants_candidats.h ../Partie_2/gestion_clef.h ../Partie_3/chaine_cle.h ../Partie_3/chaine_protected.h 
+	gcc -c test_tree.c -lssl -lcrypto
+
+test_tree : test_tree.o block.o block_tree.o gestion_votants_candidats.o gestion_clef.o chaine_cle.o chaine_protected.o signature.o gestion_hachage.o tests_primalite.o gestion_cryptage.o
+	gcc -o test_tree test_tree.o block.o block_tree.o gestion_votants_candidats.o gestion_clef.o chaine_cle.o chaine_protected.o signature.o gestion_hachage.o tests_primalite.o gestion_cryptage.o -lssl -lcrypto
 
 
 main_final.o : main_final.c block.h gestion_vote_block.h ../Partie_2/gestion_votants_candidats.h ../Partie_2/gestion_clef.h ../Partie_3/chaine_cle.h ../Partie_3/chaine_protected.h 

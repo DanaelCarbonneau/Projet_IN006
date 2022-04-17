@@ -19,6 +19,8 @@ void write_block(char* nom_fichier, Block* b){
     char * s_hash = hash_to_str(hash);
     char * s_prev = hash_to_str(previous);
 
+ 
+
     fprintf(fichier_blocks,"%s\n%s\n%d\n",s_hash,s_prev,nonce);
 
     free(s_hash);
@@ -271,7 +273,6 @@ void compute_proof_of_work(Block *B, int d){
         verif_d = verifie_nb_d(B->hash,d);
         free(s);
     } 
-    printf("hash de b : %s\n",hash_to_str(B->hash));
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
 int verify_block(Block* B, int d) {
@@ -314,11 +315,10 @@ void generate_fichier_comparaison(Block* b,int nb_d_max){
 void delete_block(Block* b){
     CellProtected* courant = b->votes;
     CellProtected* tmp;
-    while(courant){
+    while(courant!= NULL){
         tmp = courant->next;
         free(courant);
         courant = tmp;
     }
-
     free(b);
 }
