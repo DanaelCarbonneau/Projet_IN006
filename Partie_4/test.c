@@ -22,7 +22,8 @@ int main(){
 
 
   /*Comparer le temps mis pour lui donner une proof of work de 0 à D_MAX*/
-  generate_fichier_comparaison(b,D_MAX);
+  //generate_fichier_comparaison(b,D_MAX);
+  compute_proof_of_work(b,3);
 
   /*Test d'écriture et lecture dans un fichier*/
   write_block("ecriture_bloc.txt",b);
@@ -42,7 +43,7 @@ int main(){
     free(kts);
     print_list_protected(b_bis->votes);
   }
-
+  printf("Validité du bloc bis : %d\n",verify_block(b_bis,3));
   free(b_bis->author);
   delete_block(b_bis);      //Fuites mémoires issues du fait que le block ne supprime pas les valeurs des protected, volontaire pour nos tests
 

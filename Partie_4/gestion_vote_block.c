@@ -15,21 +15,20 @@ void submit_vote(Protected* p){
 void create_block(CellTree* tree, Key* author, int d){
     Block* b = (Block*) malloc(sizeof(Block));
 
-	printf("Affichage de l'arbre lorsqu'on ajoute un block\n");
-	print_tree(tree);
     if(b==NULL){
         printf("Erreur à l'allocation du block\n");
         return;
     }
 
 	if(tree == NULL){
-		printf("Passage dans tree == NULL\n");
-		b->previous_hash = "56";
+		b->previous_hash = (unsigned char *) malloc(SHA256_DIGEST_LENGTH*sizeof(unsigned char));
+		for(int i = 0 ; i < SHA256_DIGEST_LENGTH ; i++){
+			b->previous_hash[i] = '0';
+		}
 	}
 	else{
     	CellTree* previous = last_node(tree);       //Il faut bien récupérer le last node au début pour avoir la valeur de previous_hash
 		b->previous_hash = previous->block->hash;
-		printf("Passage dans l'update du previous hash\n");
 		
 	}
 	
@@ -40,26 +39,22 @@ void create_block(CellTree* tree, Key* author, int d){
     remove("Pending_votes.txt");        //Le fichier a été lu, on peut le supprimer
 
     compute_proof_of_work(b,d);         //On génère le hash de b
-	printf("hash de b avant de l'écrire dans pending block: %s\n",hash_to_str(b->hash));
     write_block("Pending_block.txt",b);
 }
 
 
 void add_block(int d, char* name){
 	Block* new_b = read_block("Pending_block.txt");
-	printf("\navant compute : %s\n",hash_to_str(new_b->hash));
-	compute_proof_of_work(new_b,d);
-	printf("\nAprès compute : %s\n",hash_to_str(new_b->hash));
+	//compute_proof_of_work(new_b,d);
 	
 	char buffer[256];
-	printf("\nAffichage de ce qu'on va écrire %s,%s\n",key_to_str(new_b->author), hash_to_str(new_b->hash));
-	//print_list_protected(new_b->votes);
+	//if (verify_block(new_b,d)){
 
-	if (verify_block(new_b,d)){
 		sprintf(buffer,"../Blockchain/%s",name);
 		write_block(buffer,new_b);
 		
-	} remove("Pending_block.txt");
+	//} 
+	remove("Pending_block.txt");
 }
 
 
@@ -108,7 +103,6 @@ CellTree* read_tree(){
 	if (rep != NULL){
 		
 		while (dir = readdir(rep)){
-			//printf("dir pas null %d", dir == NULL);
 			if (strcmp(dir->d_name,".")!=0 && strcmp(dir->d_name,"..")!=0){
 				
 				char nom_f_block[271];		//taille de dir->d_name + 14 caractères pour le répertoire + 1 pour l'arrêt
@@ -149,7 +143,6 @@ CellTree* read_tree(){
 		for (int j = 0; j < size_T; j++){
 			fils_potentiel = T[j];
 			if ( estFils(fils_potentiel,n_cour)){
-				printf("On a trouvé un fils\n");
 				add_child(n_cour,fils_potentiel);
 				a_un_pere = 1;
 			}
@@ -200,11 +193,8 @@ CellProtected* extraction_protected(CellTree* ab){
 }
 
 Key* compute_winner_BT(CellTree* tree, CellKey* candidates, CellKey* voters, int sizeC, int sizeV){
-	printf("Au début ?\n");
 	CellProtected* liste_pr = extraction_protected(tree);
-	printf("Dans supprimer ?\n");
 	liste_pr = supprimer_fausses_declarations(liste_pr);
-	printf("Dans compute winner ?\n");
 	Key* gagnant = compute_winner(liste_pr, candidates, voters, sizeC, sizeV);
 	return gagnant;
 }

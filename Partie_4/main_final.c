@@ -42,12 +42,9 @@ int main(){
     CellKey* liste_cles_c = read_public_keys("candidates.txt");
     CellKey* liste_cles_v = read_public_keys("keys.txt");
 
-    printf("Affichage des clés \n");
-    print_list_keys(liste_cles_c);
-    print_list_keys(liste_cles_v);
-    printf("Passage\n");
-    print_list_protected(liste_decl);
-    printf("Sortie_print\n");
+    //print_list_keys(liste_cles_c);
+    //print_list_keys(liste_cles_v);
+    //print_list_protected(liste_decl);
 
     /*Soumission des votes et création des blocks*/
     CellProtected* cour_pr = liste_decl;
@@ -57,7 +54,6 @@ int main(){
     Key* k_auteur_prive = (Key*) malloc(sizeof(Key));
     init_pair_keys(k_auteur_public,k_auteur_prive,3,7);
 
-    printf("Avant parcourt des décla\n");
     while (cour_pr){
         submit_vote(cour_pr->data);
         
@@ -65,35 +61,28 @@ int main(){
             create_block(res_tree, k_auteur_public,2);
             char name[256];
             sprintf(name,"B%d.txt",cpt/NB_VOTE_PAR_BLOCK);
-            add_block(D, name);
+            add_block(2, name);
         }
 
-        if(cpt%3==0){
+        
             res_tree = read_tree();
-        }
+        
       
         cpt++;
         cour_pr = cour_pr->next;
     }
 
-printf("Affichage final\n");
+printf("\n\n================\n\nAffichage final de l'arbre\n");
+
     print_tree(res_tree);
-    printf("Avant compute winner\n");
+    
+
     Key* gagnant = compute_winner_BT(res_tree,liste_cles_c,liste_cles_v,CANDIDATS,VOTANTS);
-    printf("Le gagnant est : %s", key_to_str(gagnant));
+    printf("\n\n====\nLe gagnant est : %s\n", key_to_str(gagnant));
 
     
 
-#if 0
-    printf("Avant read_tree\n");
-   CellTree* tree_commun = read_tree();
-    printf("Après read_tree\n");
-    print_tree(tree_commun);
 
-    printf("Avant compute winner\n");
-    Key* gagnant = compute_winner_BT(tree_commun,liste_cles_c,liste_cles_v,CANDIDATS,VOTANTS);
-    printf("Le gagnant est : %s", key_to_str(gagnant));
-#endif 
     free(k_auteur_public);
     free(k_auteur_prive);
 }

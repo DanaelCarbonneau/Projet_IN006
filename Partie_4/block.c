@@ -16,6 +16,7 @@ void write_block(char* nom_fichier, Block* b){
 
     fprintf(fichier_blocks,"%s\n",cle);
 
+
     char * s_hash = hash_to_str(hash);
     char * s_prev = hash_to_str(previous);
 
@@ -261,24 +262,27 @@ int verifie_nb_d(unsigned char *hash, int d) {
 
 void compute_proof_of_work(Block *B, int d){
     B->nonce = 0;
+    
 
     int verif_d = 0;
     char* s;
     while(verif_d == 0){
         
         s = block_to_str(B);
-        //printf("block to str : %s\n",s);
         B->hash = hash_function_SHA256(s);
+
         B->nonce ++;
         verif_d = verifie_nb_d(B->hash,d);
         free(s);
-    } 
+    }
+
+
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
 int verify_block(Block* B, int d) {
     char* s = block_to_str(B);
     int res = 0;
-    if (verifie_nb_d(B->hash, d) && strcmp(B->hash, hash_function_SHA256(s)) == 0) {
+    if (verifie_nb_d(B->hash, d) && strcmp(B->hash, hash_function_SHA256(s))==0 ) {
         res = 1;
     }
     free(s);

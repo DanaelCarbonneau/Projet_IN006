@@ -79,7 +79,6 @@ void delete_node(CellTree* node){
 
 
 void delete_tree(CellTree* ab){
-    printf("====\nAppel avec %d\n", ab);
     if(ab==NULL){
         return;
     }
