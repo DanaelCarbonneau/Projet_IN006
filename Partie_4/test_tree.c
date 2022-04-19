@@ -23,10 +23,10 @@ int main(){
     print_tree(racine);
 
     CellTree* lastNode = last_node(racine);
-    char* tmp = hast_to_str(nodes[5]->block->hash);
+    char* tmp = hash_to_str(nodes[5]->block->hash);
     printf("Résultat attendu\nLast_node = %s\n",tmp);
     
-    tmp = lastNode->block->hash;
+    tmp = hahs_to_str(lastNode->block->hash);
     printf("Résultat obtenu\nLast_node = %s\n",tmp);
     free(tmp);
 
