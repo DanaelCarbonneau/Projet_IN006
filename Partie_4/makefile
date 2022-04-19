@@ -80,4 +80,4 @@ gestion_votants_candidats.o : ../Partie_2/gestion_votants_candidats.c ../Partie_
 	
 
 clean:
-	rm -f *.o test test_SHA256
+	rm -f *.o test test_SHA256 main_final test_gestion_vote_blocks test_tree
