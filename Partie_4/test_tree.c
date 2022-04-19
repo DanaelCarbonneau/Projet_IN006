@@ -23,10 +23,11 @@ int main(){
     print_tree(racine);
 
     CellTree* lastNode = last_node(racine);
-
-    printf("Résultat attendu\nLast_node = %d\n",nodes[5]);
-
-    printf("Résultat obtenu\nLast_node = %d\n",lastNode);
+    char* tmp = hast_to_str(nodes[5]->block->hash);
+    printf("Résultat attendu\nLast_node = %d\n",tmp);
+    
+    tmp = lastNode->block->hash;
+    printf("Résultat obtenu\nLast_node = %d\n",tmp);
 
 
     CellProtected* liste = fusion_arbre(racine);
