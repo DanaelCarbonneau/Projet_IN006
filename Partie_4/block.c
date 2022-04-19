@@ -349,7 +349,7 @@ void delete_block(Block* b){
 /*Version qui nous semble plus appropriée pour la gestion de la mémoire*/
 
 void delete_block(Block* b){
-    delete_cell_protected(b->votes);
+    delete_list_protected(b->votes);
+    
     free(b);
 }
-

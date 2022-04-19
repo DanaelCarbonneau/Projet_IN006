@@ -40,6 +40,8 @@ void create_block(CellTree* tree, Key* author, int d){
 
     compute_proof_of_work(b,d);         //On génère le hash de b
     write_block("Pending_block.txt",b);
+
+	delete_block(b);
 }
 
 
@@ -55,6 +57,14 @@ void add_block(int d, char* name){
 		
 	} 
 	remove("Pending_block.txt");
+
+/*Puisqu'on gère des données dynamiques qui ne seront plus accessibles dans le main, on les libère ici*/
+	free(new_b->author);
+	free(new_b->hash);
+	free(new_b->previous_hash);
+	
+	
+	delete_block(new_b);
 }
 
 
@@ -119,6 +129,7 @@ CellTree* read_tree(){
 				noeud = create_node(block);
 				T[n] = noeud;
 
+	
 				n++;
 			}
 
@@ -167,12 +178,16 @@ CellTree* read_tree(){
 	for (int k = 0; k < size_T; k++){
 		n_cour = T[k];
 		if (n_cour->father == NULL){
-			return n_cour;
+			break;
+			
 		}
 	} 
 
 	free(T);
-	closedir(rep);
+	if(closedir(rep)){
+		printf("Erreur de fermeture du dossier\n");
+	}
+	return n_cour;
 }
 
 
@@ -198,5 +213,6 @@ Key* compute_winner_BT(CellTree* tree, CellKey* candidates, CellKey* voters, int
 	CellProtected* liste_pr = extraction_protected(tree);
 	liste_pr = supprimer_fausses_declarations(liste_pr);
 	Key* gagnant = compute_winner(liste_pr, candidates, voters, sizeC, sizeV);
+	delete_list_protected(liste_pr);
 	return gagnant;
 }

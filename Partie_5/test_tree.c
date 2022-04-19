@@ -40,18 +40,7 @@ int main(){
 
     delete_tree(racine);
 
-    #if 0
-
-    for(int i = 0; i < 6 ; i ++){
-        delete_cell_protected(tab[i]->votes);
-        free(tab[i]->author);
-        free(tab[i]->hash);
-        free(tab[i]->previous_hash);
-        free(tab[i]);
-        free(nodes[i]);
-    }
-    #endif
-
+    
     
 }
 

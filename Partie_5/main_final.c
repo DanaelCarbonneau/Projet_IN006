@@ -14,9 +14,9 @@
 #include "../Partie_4/block.h"
 
 #define D 2
-#define VOTANTS 50
+#define VOTANTS 1000
 #define CANDIDATS 5
-#define NB_VOTE_PAR_BLOCK 5
+#define NB_VOTE_PAR_BLOCK 50
 
 int main(){
     int choix;
@@ -24,8 +24,13 @@ int main(){
     scanf("%d",&choix);
     
     DIR * rep = opendir ( "../Blockchain/") ;
-    if ( rep != NULL ) {
-        struct dirent * dir ;
+
+    if(rep == NULL){
+        printf("Erreur d'ouverture du dossier\n");
+        return 0;
+    }
+
+    struct dirent * dir ;
 
         while (( dir = readdir ( rep ) ) ) {
             
@@ -33,10 +38,7 @@ int main(){
                 remove(dir->d_name);
             }
         }
-        closedir ( rep ) ;
-    }
-
-
+   
     generate_random_data(VOTANTS, CANDIDATS);
     CellProtected* liste_decl = read_protected("declarations.txt");
     CellKey* liste_cles_c = read_public_keys("candidates.txt");
@@ -58,6 +60,8 @@ int main(){
     Key* k_auteur_prive = (Key*) malloc(sizeof(Key));
     init_pair_keys(k_auteur_public,k_auteur_prive,3,7);
 
+    CellTree* tempo;
+
     while (cour_pr){
         submit_vote(cour_pr->data);
         
@@ -66,15 +70,19 @@ int main(){
             char name[256];
             sprintf(name,"B%d.txt",cpt/NB_VOTE_PAR_BLOCK);
             add_block(2, name);
+            
         }
 
-        
+            tempo = res_tree;
+            delete_tree(tempo);
             res_tree = read_tree();
-        
+    
       
         cpt++;
         cour_pr = cour_pr->next;
     }
+            
+
 
 printf("\n\n================\n\nAffichage final de l'arbre\n");
 
@@ -82,17 +90,30 @@ printf("\n\n================\n\nAffichage final de l'arbre\n");
     
 
     Key* gagnant = compute_winner_BT(res_tree,liste_cles_c,liste_cles_v,CANDIDATS,VOTANTS);
-    printf("\n\n====\nLe gagnant avec l'utilisation d'une blockchain est : %s\n", key_to_str(gagnant));
+    char * s = key_to_str(gagnant);
+    printf("\n\n====\nLe gagnant avec l'utilisation d'une blockchain est : %s\n", s);
+    free(s);
+
+
 
     printf("\n====\nVérification de notre résultat\n");
     Key* gagnant_2 = compute_winner(liste_decl,liste_cles_c,liste_cles_v,CANDIDATS,VOTANTS);
-    printf("Le gagnant selon la méthode centralisée est : %s\n",key_to_str(gagnant_2));
-    
-    delete_tree(res_tree);
-    delete_cell_key(liste_cles_c);
-    delete_cell_key(liste_cles_v);
-    delete_cell_protected(liste_decl);
+    s = key_to_str(gagnant_2);
+    printf("Le gagnant selon la méthode centralisée est : %s\n",s);
+    free(s);
 
+    
+    //delete_tree(res_tree);
+
+    
+    delete_list_keys(liste_cles_c);
+    delete_list_keys(liste_cles_v);
+    delete_list_protected(liste_decl);
+
+
+
+
+    closedir(rep);
     free(k_auteur_public);
     free(k_auteur_prive);
 }

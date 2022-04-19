@@ -46,6 +46,7 @@ HashTable* create_hashtable(CellKey* keys, int size){
 
 	HashTable* h_table = (HashTable*)malloc(sizeof(HashTable));     //table créée et retournée
 
+	
     if(h_table==NULL){
         printf("Erreur à l'allocation!\n");
         return NULL;
@@ -53,6 +54,10 @@ HashTable* create_hashtable(CellKey* keys, int size){
 
 	h_table->size = size;
 	h_table->tab = (HashCell**)malloc(size*sizeof(HashCell*));
+
+	if(h_table->tab==NULL){
+		printf("Erreur à l'allocation de la table de hachage\n");
+	}
 
 	for (int i = 0; i < size; i++){
 		h_table->tab[i] = NULL;

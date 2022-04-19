@@ -29,7 +29,7 @@ CellProtected* read_protected(char* name){
 	CellProtected* liste = NULL;
 
 	char ligne[256];
-	
+
 	while (fgets(ligne, 256,f)!=NULL){
 		Protected* nouv = str_to_protected(ligne);
 		liste = ajoutEnTete_protected(nouv,liste);
@@ -51,9 +51,11 @@ void print_list_protected(CellProtected* LCP){
 
 
 void delete_cell_protected(CellProtected* c){
-    liberer_protected(c->data);		
+    liberer_protected(c->data);		//Pour régler nos soucis de fuite mémoire, et conformément à l'utilisation dans notre main, on libère les protected
     free(c);
 }
+
+
 
 
 void delete_list_protected(CellProtected* LCP){
