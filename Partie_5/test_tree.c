@@ -12,6 +12,7 @@ int main(){
         nodes[i] =  create_node(tab[i]);
     }
 
+
     CellTree* racine = nodes[0];
     add_child(racine,nodes[1]);
     add_child(racine,nodes[2]);
@@ -26,6 +27,7 @@ int main(){
     char* tmp = hash_to_str(nodes[5]->block->hash);
     printf("Résultat attendu\nLast_node = %s\n",tmp);
     
+    free(tmp);
     tmp = hash_to_str(lastNode->block->hash);
     printf("Résultat obtenu\nLast_node = %s\n",tmp);
     free(tmp);
@@ -34,8 +36,23 @@ int main(){
     CellProtected* liste = fusion_arbre(racine);
     printf("Liste la plus longue obtenue dans l'abre : \n");
     print_list_protected(liste);
+    printf("\n");
 
-    delete_tree(racine);      
+    delete_tree(racine);
+
+    #if 0
+
+    for(int i = 0; i < 6 ; i ++){
+        delete_cell_protected(tab[i]->votes);
+        free(tab[i]->author);
+        free(tab[i]->hash);
+        free(tab[i]->previous_hash);
+        free(tab[i]);
+        free(nodes[i]);
+    }
+    #endif
+
+    
 }
 
     

@@ -4,9 +4,6 @@
 #include<openssl/sha.h>
 
 
-
-/* IDENFITIFICATION ACTUELLE DU PROBLÈME : DANS ADD CHILD LE PÈRE NE BOUCLE PAS*/
-#include "block.h"
 #include "gestion_vote_block.h"
 
 
@@ -14,7 +11,7 @@
 #include "../Partie_2/gestion_clef.h"
 #include "../Partie_3/chaine_cle.h"
 #include "../Partie_3/chaine_protected.h"
-
+#include "../Partie_4/block.h"
 
 #define D 2
 #define VOTANTS 50
@@ -92,6 +89,9 @@ printf("\n\n================\n\nAffichage final de l'arbre\n");
     printf("Le gagnant selon la méthode centralisée est : %s\n",key_to_str(gagnant_2));
     
     delete_tree(res_tree);
+    delete_cell_key(liste_cles_c);
+    delete_cell_key(liste_cles_v);
+    delete_cell_protected(liste_decl);
 
     free(k_auteur_public);
     free(k_auteur_prive);

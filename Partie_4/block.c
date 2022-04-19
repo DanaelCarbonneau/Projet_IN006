@@ -146,6 +146,7 @@ Block* read_block(char*nom_fichier){
     }
     res->votes = tete;
     
+    
     fclose(fichier_lecture);
     return res;
 }
@@ -242,6 +243,7 @@ char* block_to_str(Block* B){
     
     /*On libère ce qui reste de mémoire allouée*/
     free(cle);
+    free(previous);
     
     /*On retourne notre chaine*/
     return res;
@@ -293,7 +295,6 @@ int verify_block(Block* B, int d) {
     char* hash_actuel = hash_to_str(B->hash);
     char* hash_attendu = hash_to_str(hash_function_SHA256(s));
     if (verifie_nb_d(B->hash, d) && (strcmp(hash_attendu,hash_actuel)==0)) {
-        printf("le bloc est valide ! \n");
         res = 1;
     }
     free(hash_attendu);
@@ -330,6 +331,9 @@ void generate_fichier_comparaison(Block* b,int nb_d_max){
     fclose(fichier);
 }
 
+
+
+/*Version respectant les contraintes de l'énoncé
 void delete_block(Block* b){
     CellProtected* courant = b->votes;
     CellProtected* tmp;
@@ -340,3 +344,12 @@ void delete_block(Block* b){
     }
     free(b);
 }
+*/
+
+/*Version qui nous semble plus appropriée pour la gestion de la mémoire*/
+
+void delete_block(Block* b){
+    delete_cell_protected(b->votes);
+    free(b);
+}
+

@@ -4,8 +4,6 @@
 
 
 
-/* IDENFITIFICATION ACTUELLE DU PROBLÈME : DANS ADD CHILD LE PÈRE NE BOUCLE PAS*/
-#include "block.h"
 #include "gestion_vote_block.h"
 
 
@@ -13,10 +11,13 @@
 #include "../Partie_2/gestion_clef.h"
 #include "../Partie_3/chaine_cle.h"
 #include "../Partie_3/chaine_protected.h"
+#include "../Partie_4/block.h"
 
 #define D 2
 #define VOTANTS 5
 #define CANDIDATS 2
+
+
 
 
 int main(){
@@ -45,5 +46,11 @@ int main(){
 
     print_tree(mon_arbre);
 
+    delete_list_protected(liste_decl);
+    delete_list_keys(liste_cles_v);
+    delete_list_keys(liste_cles_c);
+    free(k_auteur_prive);
+    free(k_auteur_public);
+    delete_tree(mon_arbre);
 
 }

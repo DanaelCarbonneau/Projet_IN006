@@ -1,7 +1,7 @@
 #ifndef BLOCK_TREEH
 #define BLOCK_TREEH
 
-#include "block.h"
+#include "../Partie_4/block.h"
 
 typedef struct block_tree_cell {
     Block * block ;

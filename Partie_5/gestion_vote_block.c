@@ -61,7 +61,11 @@ void add_block(int d, char* name){
 int estFils(CellTree* noeud, CellTree* pere){
 	char* h1 = hash_to_str(noeud->block->previous_hash);
 	char* h2 = hash_to_str(pere->block->hash);
-	return !(strcmp(h1,h2));
+
+	int res = !(strcmp(h1,h2));
+	free(h1);
+	free(h2);
+	return res;
 }
 
 
@@ -109,7 +113,6 @@ CellTree* read_tree(){
 
 				sprintf(nom_f_block,"../Blockchain/%s",dir->d_name);
 
-				
 			
 				block = read_block(nom_f_block);
 				
@@ -154,6 +157,7 @@ CellTree* read_tree(){
 				frere_orphelin->nextBro = T[i];
 			}
 		}
+
 		
 	}
 
@@ -167,6 +171,7 @@ CellTree* read_tree(){
 		}
 	} 
 
+	free(T);
 	closedir(rep);
 }
 

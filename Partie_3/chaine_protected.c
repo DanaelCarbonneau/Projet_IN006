@@ -19,13 +19,17 @@ CellProtected* ajoutEnTete_protected(Protected* pr, CellProtected* liste){
 
 
 CellProtected* read_protected(char* name){
+
 	FILE* f = fopen(name,"r");
 	if (f==NULL){
 		printf("Erreur d'ouverture du fichier. Read Protected\n");
 		return NULL;
 	}
+
 	CellProtected* liste = NULL;
+
 	char ligne[256];
+	
 	while (fgets(ligne, 256,f)!=NULL){
 		Protected* nouv = str_to_protected(ligne);
 		liste = ajoutEnTete_protected(nouv,liste);

@@ -44,26 +44,18 @@ void add_child(CellTree* father, CellTree* child){
 }
 
 
+
 void print_tree(CellTree* ab){
     if(ab==NULL){
         return;
     }
 
-    char* s = hash_to_str(ab->block->hash);
-    printf("\n%s\t hauteur : %d\n",s,ab->height);
+    char*s = hash_to_str(ab->block->hash);
+    printf("%s\thauteur = %d\n",s,ab->height);
     free(s);
+
     print_tree(ab->firstChild);
-
-    CellTree* courant = ab->nextBro;
-    while(courant){
-        s = hash_to_str(courant->block->hash);
-        printf("\n%s\t hauteur : %d\n",s,courant->height);
-        free(s);
-
-        print_tree(courant->firstChild);
-        courant = courant->nextBro;
-    }
-
+    print_tree(ab->nextBro);
 }
 
 
@@ -71,6 +63,11 @@ void print_tree(CellTree* ab){
 
 
 void delete_node(CellTree* node){
+    /*On ajoute ici les libérations qu'on ne peut pas faire quand le block n'est pas lu car ce n'est jamais le cas pour des arbres (dans nos tests, et 
+    en pratique, c'est la manière à privilégier pour de la saisie*/
+    free(node->block->author);
+    free(node->block->hash);
+    free(node->block->previous_hash);
     delete_block(node->block);
     free(node);
 }
@@ -83,45 +80,15 @@ void delete_tree(CellTree* ab){
         return;
     }
 
-    CellTree* tmp;
-    CellTree* courant = ab->nextBro;
     
+    delete_tree(ab->nextBro);
 
     delete_tree(ab->firstChild);
+    
     delete_node(ab);
-    while(courant){
-        delete_tree(courant->firstChild);
-        tmp = courant->nextBro;
-        delete_node(courant);
-        courant = tmp;
-    }
-
 }
 
 
-
-#if 0
-void delete_tree(CellTree* ab){
-	if (ab != NULL){	
-		CellTree* fils_courant = ab->firstChild;
-		CellTree* frere_courant;
-		CellTree* tmp;
-		delete_node(ab);
-		while (fils_courant){
-			tmp = fils_courant->firstChild;
-			frere_courant = fils_courant->nextBro;
-			delete_node(fils_courant);
-			fils_courant = tmp;
-			while (frere_courant){
-				tmp = frere_courant->nextBro;
-                delete_tree(frere_courant->firstChild);
-				delete_node(frere_courant);
-				frere_courant = tmp;
-			}
-		}
-	}	
-}
-#endif 
 
 
 

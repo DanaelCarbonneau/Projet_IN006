@@ -4,6 +4,8 @@
 #include<dirent.h>
 #include<string.h>
 #include"block_tree.h"
+
+
 #include"../Partie_3/gestion_hachage.h"
 #include"../Partie_3/chaine_cle.h"
 

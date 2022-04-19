@@ -5,7 +5,7 @@
 #include "../Partie_2/gestion_clef.h"
 #include"../Partie_3/chaine_protected.h"
 
-#define D_MAX 4
+#define D_MAX 3
 
 
 int main(){
@@ -23,7 +23,7 @@ int main(){
 
   /*Comparer le temps mis pour lui donner une proof of work de 0 à D_MAX*/
   //generate_fichier_comparaison(b,D_MAX);
-  compute_proof_of_work(b,3);
+  compute_proof_of_work(b,D_MAX);
 
   /*Test d'écriture et lecture dans un fichier*/
   write_block("ecriture_bloc.txt",b);
@@ -43,7 +43,7 @@ int main(){
     free(kts);
     print_list_protected(b_bis->votes);
   }
-  printf("Validité du bloc bis : %d\n",verify_block(b_bis,3));
+  printf("Validité du bloc bis : %d\n",verify_block(b_bis,D_MAX-1));
   free(b_bis->author);
   delete_block(b_bis);      //Fuites mémoires issues du fait que le block ne supprime pas les valeurs des protected, volontaire pour nos tests
 
