@@ -113,26 +113,38 @@ Block* read_block(char*nom_fichier){
     res->previous_hash = previous;
 
     res->nonce = nonce;
-    res->votes = NULL;
 
     /*On va lire lignes par lignes les protected pour les ajouter dans la liste votes*/
     fgets(buffer,256,fichier_lecture);
     
+    CellProtected* tete = NULL;
+    CellProtected* last = NULL;
     Protected* pr;
     while (strcmp(buffer,"~")!=0){      //On place ce caractère à la fin des protected rentrés dans le fichier
 
-        pr = str_to_protected(buffer);          /*Si on a un fichier qui n'a pas le tilde à la fin, au moment où
+        pr = str_to_protected(buffer);  
+                                                /*Si on a un fichier qui n'a pas le tilde à la fin, au moment où
                                                 La première ligne lue qui ne respecte pas le format d'un protected
                                                 nous fera sortir de la boucle, donc pas de problème de terminaison*/
         if (pr == NULL){
             printf("Les lignes suivantes ne seront pas prises en compte\n");
             return res;
         }
-        res->votes = ajoutEnTete_protected(pr,res->votes);          //On ajoute notre protected
-        /*Le protected n'est pas libéré ici car il est simplement référencé lorsqu'on créé une cellule.*/
+
+        if (tete == NULL){
+            tete = create_cell_protected(pr);
+            last = tete;
+        } else{
+
+            last->next = create_cell_protected(pr);
+            last = last->next;
+        }
 
         fgets(buffer,256,fichier_lecture);        //On lit la ligne suivante
+        /*Le protected n'est pas libéré ici car il est simplement référencé lorsqu'on créé une cellule.*/
+
     }
+    res->votes = tete;
     
     fclose(fichier_lecture);
     return res;
@@ -258,8 +270,6 @@ int verifie_nb_d(unsigned char *hash, int d) {
 }
 
 
-
-
 void compute_proof_of_work(Block *B, int d){
     B->nonce = 0;
     
@@ -267,26 +277,31 @@ void compute_proof_of_work(Block *B, int d){
     int verif_d = 0;
     char* s;
     while(verif_d == 0){
-        B->nonce ++; 
+        B->nonce += 1;
         s = block_to_str(B);
-        B->hash = hash_function_SHA256(s);        
+        B->hash = hash_function_SHA256(s);
+
         verif_d = verifie_nb_d(B->hash,d);
         free(s);
     }
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 
-
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
 int verify_block(Block* B, int d) {
     char* s = block_to_str(B);
     int res = 0;
-    if (verifie_nb_d(B->hash, d)) {
-	    //MAIS SUREMENT INSUFFISANT !!!
+    char* hash_actuel = hash_to_str(B->hash);
+    char* hash_attendu = hash_to_str(hash_function_SHA256(s));
+    if (verifie_nb_d(B->hash, d) && (strcmp(hash_attendu,hash_actuel)==0)) {
+        printf("le bloc est valide ! \n");
         res = 1;
     }
+    free(hash_attendu);
+    free(hash_actuel);
     free(s);
     return res; 
 }
+
 
 void generate_fichier_comparaison(Block* b,int nb_d_max){
 
