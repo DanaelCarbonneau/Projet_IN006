@@ -26,7 +26,7 @@ int main(){
     char* tmp = hash_to_str(nodes[5]->block->hash);
     printf("Résultat attendu\nLast_node = %s\n",tmp);
     
-    tmp = hahs_to_str(lastNode->block->hash);
+    tmp = hash_to_str(lastNode->block->hash);
     printf("Résultat obtenu\nLast_node = %s\n",tmp);
     free(tmp);
 
