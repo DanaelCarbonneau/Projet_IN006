@@ -28,6 +28,7 @@ int main(){
     
     tmp = lastNode->block->hash;
     printf("Résultat obtenu\nLast_node = %d\n",tmp);
+    free(tmp);
 
 
     CellProtected* liste = fusion_arbre(racine);
