@@ -195,7 +195,7 @@ char* block_to_str(Block* B){
     /*On veut d'abord calculer la taille exacte à allouer (couteux mais une seule fois X realloc nombreux ?)*/
     /*On connait la taille des char* immédiatement grace à strlen*/
     char* cle = key_to_str(B->author);
-    unsigned char* previous = B->previous_hash;
+    unsigned char* previous = hash_to_str(B->previous_hash);
     
     int taille_tot = strlen(cle)+strlen(previous);
 
