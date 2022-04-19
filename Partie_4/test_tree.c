@@ -24,10 +24,10 @@ int main(){
 
     CellTree* lastNode = last_node(racine);
     char* tmp = hast_to_str(nodes[5]->block->hash);
-    printf("Résultat attendu\nLast_node = %d\n",tmp);
+    printf("Résultat attendu\nLast_node = %s\n",tmp);
     
     tmp = lastNode->block->hash;
-    printf("Résultat obtenu\nLast_node = %d\n",tmp);
+    printf("Résultat obtenu\nLast_node = %s\n",tmp);
     free(tmp);
 
 
