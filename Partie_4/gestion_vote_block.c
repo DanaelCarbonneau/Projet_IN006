@@ -48,12 +48,12 @@ void add_block(int d, char* name){
 	//compute_proof_of_work(new_b,d);
 	
 	char buffer[256];
-	//if (verify_block(new_b,d)){
+	if (verify_block(new_b,d)){
 
 		sprintf(buffer,"../Blockchain/%s",name);
 		write_block(buffer,new_b);
 		
-	//} 
+	} 
 	remove("Pending_block.txt");
 }
 
@@ -182,14 +182,15 @@ CellProtected* extraction_protected(CellTree* ab){
 	}	
 	CellProtected* res = ab->block->votes;
 	CellProtected* liste_pr_cour;
-	CellTree* fils_courant = ab->firstChild;
-	CellTree* frere_courant;
-	while (fils_courant){
-		liste_pr_cour = fils_courant->block->votes;
-		fusion_liste_protected(liste_pr_cour, res);
-		fils_courant = highest_child(fils_courant);
+
+	CellTree* prochain_fils = highest_child(ab);
+	
+	while (prochain_fils){
+		liste_pr_cour = prochain_fils->block->votes;
+		res = fusion_liste_protected(liste_pr_cour, res);
+		prochain_fils = highest_child(prochain_fils);
 	}
-	return res;	
+	return res;		
 }
 
 Key* compute_winner_BT(CellTree* tree, CellKey* candidates, CellKey* voters, int sizeC, int sizeV){
