@@ -254,6 +254,20 @@ unsigned char* hash_function_SHA256(const char* s){
     unsigned char* hash = SHA256(s,strlen(s),0);
     return hash;
 }
+#if 0
+
+Nous avons réalisé -trop tard dans le projet- ce qui était demandé pour la fonction de hachage, ayant fait une autre méthode
+et choisissant de convertir le tableau dès que nécessaire, nous n en avons pas été inquiétés. Voilà le code qui aurait
+mieux convenu pour strictement répondre à la question
+
+unsigned char* hash_function_SHA256(const char* s){
+    unsigned char* hash = SHA256(s,strlen(s),0);
+    return hash_to_str(hash);
+}
+#endif
+
+
+
 
 
 

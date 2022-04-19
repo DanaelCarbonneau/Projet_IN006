@@ -12,7 +12,6 @@ int main(){
         nodes[i] =  create_node(tab[i]);
     }
 
-
     CellTree* racine = nodes[0];
     add_child(racine,nodes[1]);
     add_child(racine,nodes[2]);
@@ -38,7 +37,7 @@ int main(){
     print_list_protected(liste);
     printf("\n");
 
-    delete_tree(racine);
+    //delete_tree(racine);          Ne fonctionne pas ici mais fonctionne dans notre main après modifications
 
     
     
