@@ -78,10 +78,13 @@ printf("\n\n================\n\nAffichage final de l'arbre\n");
     
 
     Key* gagnant = compute_winner_BT(res_tree,liste_cles_c,liste_cles_v,CANDIDATS,VOTANTS);
-    printf("\n\n====\nLe gagnant est : %s\n", key_to_str(gagnant));
+    printf("\n\n====\nLe gagnant avec l'utilisation d'une blockchain est : %s\n", key_to_str(gagnant));
 
+    printf("\n====\nVérification de notre résultat\n");
+    Key* gagnant_2 = compute_winner(liste_decl,liste_cles_c,liste_cles_v,CANDIDATS,VOTANTS);
+    printf("Le gagnant selon la méthode centralisée est : %s\n",key_to_str(gagnant_2));
     
-
+    delete_tree(res_tree);
 
     free(k_auteur_public);
     free(k_auteur_prive);

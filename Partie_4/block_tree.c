@@ -83,19 +83,17 @@ void delete_tree(CellTree* ab){
         return;
     }
 
-    CellTree* tmp = ab->firstChild;
+    CellTree* tmp;
     CellTree* courant = ab->nextBro;
-    CellTree* a_supprimer;
+    
 
+    delete_tree(ab->firstChild);
     delete_node(ab);
-    delete_tree(tmp);
     while(courant){
-        a_supprimer = courant;
-        tmp = courant->firstChild;
-        courant = courant->nextBro;
-        
-        delete_node(a_supprimer);
-        delete_tree(tmp);
+        delete_tree(courant->firstChild);
+        tmp = courant->nextBro;
+        delete_node(courant);
+        courant = tmp;
     }
 
 }
