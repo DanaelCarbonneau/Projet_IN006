@@ -93,7 +93,7 @@ CellTree* read_tree(){
 	}
 
 	
-	/*Création et ajout des noeuds � T*/
+	/*Création et ajout des noeuds T*/
 	rewinddir(rep);
 
 	CellTree* noeud;
@@ -109,11 +109,7 @@ CellTree* read_tree(){
 
 				sprintf(nom_f_block,"../Blockchain/%s",dir->d_name);
 
-				/*Trop coûteux de faire ça dynamiquement ?
-				nom_f_block = (char*)(malloc(sizeof(char)*(strlen("../Blockchain/")+strlen(dir->d_name)+1)));
-				strcpy(nom_f_block,"../Blockchain/");
-				strcat(nom_f_block,dir->d_name);
-				*/
+				
 			
 				block = read_block(nom_f_block);
 				

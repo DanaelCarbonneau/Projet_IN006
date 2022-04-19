@@ -22,8 +22,11 @@
 #define NB_VOTE_PAR_BLOCK 5
 
 int main(){
+    int choix;
+    printf("Voulez vous tous les affichages ?\n");
+    scanf("%d",&choix);
     
-        DIR * rep = opendir ( "../Blockchain/") ;
+    DIR * rep = opendir ( "../Blockchain/") ;
     if ( rep != NULL ) {
         struct dirent * dir ;
 
@@ -42,10 +45,14 @@ int main(){
     CellKey* liste_cles_c = read_public_keys("candidates.txt");
     CellKey* liste_cles_v = read_public_keys("keys.txt");
 
-    //print_list_keys(liste_cles_c);
-    //print_list_keys(liste_cles_v);
-    //print_list_protected(liste_decl);
-
+    if(choix){
+        printf("\nAffichage des clés des candidats\n");
+        print_list_keys(liste_cles_c);
+        printf("\nAffichage des clés des votants\n");
+        print_list_keys(liste_cles_v);
+        printf("\nAffichage des déclarations\n");
+        print_list_protected(liste_decl);
+    }
     /*Soumission des votes et création des blocks*/
     CellProtected* cour_pr = liste_decl;
     int cpt = 1;

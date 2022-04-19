@@ -1,8 +1,6 @@
 #include"gestion_votants_candidats.h"
 
 
-/*Attention : ouverture pour la fin du projet, on pourrait travailler sur la taille de nos nombres premiers générés,
-la faire dépendre du nombre de clés à générer (pour éviter les doublons)*/
 
 Votant* generation_fichier_votants(int nv){
     FILE* fichier_votant = fopen("keys.txt","w");

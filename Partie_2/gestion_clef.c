@@ -50,7 +50,7 @@ char* key_to_str(Key* key){
     char* chaine_res;
 
     /*On écrit au bon format dans chaine_res*/
-    sprintf(buffer,"(%lx,%lx)%c",key->val,key->n,'\0');
+    sprintf(buffer,"(%lx,%lx)",key->val,key->n);
 
     chaine_res = strdup(buffer);
 

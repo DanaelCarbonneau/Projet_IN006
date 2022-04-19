@@ -22,7 +22,6 @@ int is_prime_naive(long p){
 }
 
 /*Exponentiation modulaire rapide*/
-
 /*Version naïve, de grande complexité*/
 
 long modpow_naive(long a, long m, long n){
@@ -35,7 +34,6 @@ long modpow_naive(long a, long m, long n){
 }
 
 /*Version plus efficace de modpow, récursive, procédant par élévation au carré*/
-
 
 long modpow(long a, long m, long n){
 	if (m==0){

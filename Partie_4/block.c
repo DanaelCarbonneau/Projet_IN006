@@ -267,11 +267,9 @@ void compute_proof_of_work(Block *B, int d){
     int verif_d = 0;
     char* s;
     while(verif_d == 0){
-        
+        B->nonce ++; 
         s = block_to_str(B);
-        B->hash = hash_function_SHA256(s);
-
-        B->nonce ++;
+        B->hash = hash_function_SHA256(s);        
         verif_d = verifie_nb_d(B->hash,d);
         free(s);
     }
@@ -313,7 +311,7 @@ void generate_fichier_comparaison(Block* b,int nb_d_max){
         temps = ((double) (temps_final - temps_initial) / (CLOCKS_PER_SEC) );
         fprintf(fichier,"%d\t%.10f\n",i,temps);        
     }
-    
+    system("gnuplot commandes.txt");            //On éxécute la commande pour faire le graphique
     fclose(fichier);
 }
 
