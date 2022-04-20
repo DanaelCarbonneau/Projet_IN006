@@ -8,4 +8,6 @@ Nous considérons dans ce projet l’organisation d’un processus électoral pa
 
 — Partie 3 : Manipulation d’une base centralisée de déclarations et implémentation d'un mécanisme de consensus. (chap.3 du rapport)
 
-— Partie 4 : Manipulation d'une base décentralisée de déclarations. (chap. 4 et 5 du rapport)
+— Partie 4 : Base de déclarations centralisée (chap.4 du rapport)
+
+_ Partie 5 : Blocs et persistance données (chap.5 du rapport)
