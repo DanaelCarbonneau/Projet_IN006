@@ -81,10 +81,10 @@ void delete_tree(CellTree* ab){
     }
 
     
-    delete_tree(ab->nextBro);
+    
 
     delete_tree(ab->firstChild);
-    
+    delete_tree(ab->nextBro); 
     delete_node(ab);
 }
 

@@ -13,6 +13,8 @@ int main(){
     }
 
     CellTree* racine = nodes[0];
+
+    /*Les hash ne s'accordent pas, on fait les liens uniquement pour essayer un parcours*/
     add_child(racine,nodes[1]);
     add_child(racine,nodes[2]);
     add_child(nodes[2],nodes[3]);
@@ -37,10 +39,7 @@ int main(){
     print_list_protected(liste);
     printf("\n");
 
-    //delete_tree(racine);          Ne fonctionne pas ici mais fonctionne dans notre main après modifications
-
-    
-    
+   
 }
 
     
